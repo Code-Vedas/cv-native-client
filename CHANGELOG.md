@@ -1,6 +1,11 @@
 ## Change Log
 
-### 0.0.2
+## 0.0.3
+
+- Fixed changelog
+- no code changes
+
+## 0.0.2
 
 - Added readme
 - no code changes
@@ -8,6 +13,8 @@
 ## 0.0.1
 
 - Initial release
+- API for getting and setting clipboard text
+- API for getting platform version
 
 ### API Release Notes
 

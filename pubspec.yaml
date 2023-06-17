@@ -1,6 +1,6 @@
 name: vk_native_client
 description: Native client to be used in vishwakarma app
-version: 0.0.2
+version: 0.0.3
 homepage: "https://github.com/Code-Vedas/vk-native-client"
 
 environment:

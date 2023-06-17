@@ -13,7 +13,7 @@ Add this to your package's pubspec.yaml file:
 
 ```yaml
 dependencies:
-  vk_native_client: ^0.0.2
+  vk_native_client: ^0.0.3
 ```
 
 ### Example
