@@ -23,7 +23,15 @@ abstract class VkNativeClientPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
+  Future<String?> getPlatformVersion() async {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String?> getClipboardText() async {
+    throw UnimplementedError('getClipboardText() has not been implemented.');
+  }
+
+  Future<bool> setClipboardText(String text) async {
+    throw UnimplementedError('setClipboardText() has not been implemented.');
   }
 }

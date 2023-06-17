@@ -16,6 +16,8 @@ set(PLUGIN_NAME "vk_native_client_plugin")
 list(APPEND PLUGIN_SOURCES
   "vk_native_client_plugin.cpp"
   "vk_native_client_plugin.h"
+  "clipboard.cpp"
+  "clipboard.h"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment
