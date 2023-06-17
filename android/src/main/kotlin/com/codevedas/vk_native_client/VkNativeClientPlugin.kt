@@ -44,8 +44,15 @@ class VkNativeClientPlugin : FlutterPlugin, MethodCallHandler {
             "getPlatformVersion" -> platformVersion(result)
             "getClipboardText" -> getClipboardText(result)
             "setClipboardText" -> setClipboardText(call, result)
+            "canCopyFromClipboard" -> canCopyFromClipboard(result)
             else -> result.notImplemented() // Method not implemented
         }
+    }
+    
+    private fun canCopyFromClipboard(result: Result) {
+        val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+        val clipData = clipboardManager?.primaryClip
+        result.success(clipData != null && clipData.itemCount > 0)
     }
 
     // Retrieve the Android version and send it back to Flutter

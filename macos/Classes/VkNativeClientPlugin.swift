@@ -38,6 +38,9 @@ public class VkNativeClientPlugin: NSObject, FlutterPlugin {
                 return
              }
              result(false) // No clipboard content found
+        case "canCopyFromClipboard":
+            let html = call.arguments as? String 
+            result(html != nil) // Return true if clipboard is available
         default:
             result(FlutterMethodNotImplemented) // Method not implemented
         }

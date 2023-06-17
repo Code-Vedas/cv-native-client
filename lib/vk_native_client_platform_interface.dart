@@ -34,4 +34,8 @@ abstract class VkNativeClientPlatform extends PlatformInterface {
   Future<bool> setClipboardText(String text) async {
     throw UnimplementedError('setClipboardText() has not been implemented.');
   }
+
+  Future<bool> canCopyFromClipboard() async {
+    throw UnimplementedError('canCopyFromClipboard() has not been implemented.');
+  }
 }

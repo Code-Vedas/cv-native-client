@@ -12,4 +12,8 @@ class VkNativeClient {
   Future<bool> setClipboardText(String text) {
     return VkNativeClientPlatform.instance.setClipboardText(text);
   }
+
+  Future<bool> canCopyFromClipboard() {
+    return VkNativeClientPlatform.instance.canCopyFromClipboard();
+  }
 }

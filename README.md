@@ -13,7 +13,7 @@ Add this to your package's pubspec.yaml file:
 
 ```yaml
 dependencies:
-  vk_native_client: ^0.0.3
+  vk_native_client: ^0.0.4
 ```
 
 ### Example
@@ -28,6 +28,8 @@ String platformVersion = await VkNativeClient().getPlatformVersion();
 String clipboardText = await VkNativeClient().getClipboardText();
 
 // Set clipboard text
-
 await VkNativeClient().setClipboardText('Hello, world!');
+
+// Check if clipboard text can be copied
+bool canCopyFromClipboard = await VkNativeClient().canCopyFromClipboard();
 ```

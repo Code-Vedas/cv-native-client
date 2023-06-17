@@ -45,6 +45,10 @@ static void vk_native_client_plugin_handle_method_call(
     *response = set_clipboard_text(args);
     fl_value_unref(args);
   }
+  else if (strcmp(method, "canCopyFromClipboard") == 0)
+  {
+    *response = get_clipboard_text();
+  }
   else
   {
     *response = FL_METHOD_RESPONSE(fl_method_not_implemented_response_new());

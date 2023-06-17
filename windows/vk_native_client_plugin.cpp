@@ -54,13 +54,43 @@ namespace vk_native_client
     else if (method_call.method_name().compare("setClipboardText") == 0)
     {
       // Set clipboard text
+      SetHTMLClipboard(method_call, std::move(result));
+    }
+    else if (method_call.method_name().compare("canCopyFromClipboard") == 0)
+    {
+      // check if clipboard has text
+      canCopyFromClipboard(method_call, std::move(result));
     }
     else
     {
       result->NotImplemented();
     }
   }
-
+  void VkNativeClientPlugin::canCopyFromClipboard(
+      const flutter::MethodCall<flutter::EncodableValue> &method_call,
+      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
+  {
+    Clipboard clipboard = Clipboard();
+    std::string *text = clipboard.getClipboardData(CF_TEXT);
+    if (text != nullptr)
+    {
+      result->Success(flutter::EncodableValue(true));
+      return;
+    }
+    std::string *unicode = clipboard.getClipboardData(CF_UNICODETEXT);
+    if (unicode != nullptr)
+    {
+      result->Success(flutter::EncodableValue(true));
+      return;
+    }
+    std::string *html = clipboard.getClipboardData(clipboard.CF_HTML);
+    if (html != nullptr)
+    {
+      result->Success(flutter::EncodableValue(true));
+      return;
+    }
+    result->Success(flutter::EncodableValue(false));
+  }
   void VkNativeClientPlugin::GetVersion(std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
   {
     std::ostringstream version_stream;

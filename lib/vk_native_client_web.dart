@@ -98,6 +98,19 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
     return true;
   }
 
+  /// Returns a [bool] indicating whether their is text on the clipboard.
+  @override
+  Future<bool> canCopyFromClipboard() async {
+    /// Check if the clipboard is empty.
+    final Future<Iterable<dynamic>> items = js_util.promiseToFuture(js_util.callMethod(this, 'read', []));
+    final Iterable<ClipboardItem> content = (await items).cast<ClipboardItem>();
+    for (final ClipboardItem item in content) {
+      final html.Blob blob = await item.getType('text/html');
+      return await blob.text() != null;
+    }
+    return false;
+  }
+
   Clipboard getClipboard() {
     return js_util.getProperty(html.window.navigator, 'clipboard') as Clipboard;
   }

@@ -27,11 +27,22 @@ public class VkNativeClientPlugin: NSObject, FlutterPlugin {
             getClipboardText(result: result) // Get clipboard text
         case "setClipboardText":
             setClipboardText(call: call, result: result) // Set clipboard text
+        case "canCopyFromClipboard":
+            result(canCopyFromClipboard()) // Check if clipboard is available    
         default:
             result(FlutterMethodNotImplemented) // Method not implemented
         }
     }
-    
+
+    // Check if clipboard is available
+    private func canCopyFromClipboard(result: @escaping FlutterResult) -> Bool {
+        let board = UIPasteboard.general
+        let htmlData = board.data(forPasteboardType: utTypeTextHtml)
+        let rtfData = board.data(forPasteboardType: utTypeTextRtf)
+        let plainData = board.string
+        result(htmlData != nil || rtfData != nil || plainData != nil) // Return true if clipboard is available
+    }    
+
     // Retrieve text from the clipboard
     private func getClipboardText(result: @escaping FlutterResult) {
         let board = UIPasteboard.general

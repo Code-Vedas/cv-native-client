@@ -13,6 +13,9 @@ class MockVkNativeClientPlatform with MockPlatformInterfaceMixin implements VkNa
 
   @override
   Future<bool> setClipboardText(String text) => Future.value(true);
+
+  @override
+  Future<bool> canCopyFromClipboard() => Future.value(true);
 }
 
 void main() {
@@ -44,5 +47,13 @@ void main() {
     VkNativeClientPlatform.instance = fakePlatform;
 
     expect(await vkNativeClientPlugin.setClipboardText('text'), true);
+  });
+
+  test('canCopyFromClipboard', () async {
+    VkNativeClient vkNativeClientPlugin = VkNativeClient();
+    MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
+    VkNativeClientPlatform.instance = fakePlatform;
+
+    expect(await vkNativeClientPlugin.canCopyFromClipboard(), true);
   });
 }

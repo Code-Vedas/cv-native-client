@@ -26,4 +26,10 @@ class MethodChannelVkNativeClient extends VkNativeClientPlatform {
     final result = await methodChannel.invokeMethod<bool>('setClipboardText', text);
     return result ?? false;
   }
+
+  @override
+  Future<bool> canCopyFromClipboard() async {
+    final result = await methodChannel.invokeMethod<bool>('canCopyFromClipboard');
+    return result ?? false;
+  }
 }

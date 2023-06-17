@@ -61,10 +61,21 @@ class _MyAppState extends State<MyApp> {
               Text('Running on: $_platformVersion\n'),
               ElevatedButton(
                 onPressed: () async {
-                  log('test');
-                  log('text: ${await _vkNativeClientPlugin.getClipboardText()}');
+                  if (await _vkNativeClientPlugin.canCopyFromClipboard()) {
+                    final clipboardText = await _vkNativeClientPlugin.getClipboardText();
+                    log('Clipboard text: $clipboardText');
+                  } else {
+                    log('Clipboard is not available');
+                  }
                 },
                 child: const Text('Get clipboard text'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  bool result = await _vkNativeClientPlugin.setClipboardText('Hello, world!');
+                  log('Clipboard text set: $result');
+                },
+                child: const Text('Set "Hello, world!" to clipboard'),
               ),
             ],
           ),

@@ -1,5 +1,10 @@
 ## Change Log
 
+## 0.0.4
+
+- Added support for 'canCopyFromClipboard` method
+- Updated readme and example
+
 ## 0.0.3
 
 - Fixed changelog
