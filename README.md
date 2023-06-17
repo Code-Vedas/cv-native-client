@@ -1,15 +1,33 @@
-# vk_native_client
+# VK Native Client
 
-A new Flutter plugin project.
+Flutter plugin for VK Native Client.
+This plugin allows you to access Native API's of platform.
 
-## Getting Started
+## Usage
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+To use this plugin, add `vk_native_client` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Installation
 
+Add this to your package's pubspec.yaml file:
+
+```yaml
+dependencies:
+  vk_native_client: ^0.0.2
+```
+
+### Example
+
+```dart
+import 'package:vk_native_client/vk_native_client.dart';
+
+// Get platform version
+String platformVersion = await VkNativeClient().getPlatformVersion();
+
+// Get clipboard text
+String clipboardText = await VkNativeClient().getClipboardText();
+
+// Set clipboard text
+
+await VkNativeClient().setClipboardText('Hello, world!');
+```
