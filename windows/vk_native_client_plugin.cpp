@@ -118,53 +118,43 @@ namespace vk_native_client
     else if (method_call.method_name().compare("setClipboardText") == 0)
     {
       // Set clipboard text
-      if (method_call.arguments() != nullptr &&
-          method_call.arguments()->IsMap())
+      if (method_call.arguments().Contains("text"))
       {
-        const auto &args_map =
-            method_call.arguments()->MapValue();
-
-        if (args_map.find(flutter::EncodableValue("text")) !=
-            args_map.end())
+        const auto &text_value = method_call.arguments().at("text");
+        if (text_value.IsString())
         {
-          const auto &text_value = args_map.at(
-              flutter::EncodableValue("text"));
-          if (text_value.IsString())
+          const std::string &text = text_value.AsString();
+          if (OpenClipboard(nullptr))
           {
-            const std::string &text =
-                text_value.StringValue();
-            if (OpenClipboard(nullptr))
+            EmptyClipboard();
+            // Allocate global memory for the clipboard data
+            HGLOBAL clipboardData = GlobalAlloc(
+                GMEM_MOVEABLE,
+                (text.length() + 1) * sizeof(TCHAR));
+            if (clipboardData != nullptr)
             {
-              EmptyClipboard();
-              // Allocate global memory for the clipboard data
-              HGLOBAL clipboardData = GlobalAlloc(
-                  GMEM_MOVEABLE,
-                  (text.length() + 1) * sizeof(TCHAR));
-              if (clipboardData != nullptr)
+              LPTSTR clipboardText =
+                  static_cast<LPTSTR>(GlobalLock(clipboardData));
+              if (clipboardText != nullptr)
               {
-                LPTSTR clipboardText =
-                    static_cast<LPTSTR>(GlobalLock(clipboardData));
-                if (clipboardText != nullptr)
-                {
-                  // Copy the text to the allocated memory
-                  _tcscpy_s(clipboardText, text.length() + 1,
-                            text.c_str());
-                  GlobalUnlock(clipboardData);
-                  // Set the clipboard data
-                  SetClipboardData(CF_UNICODETEXT,
-                                   clipboardData);
-                  CloseClipboard();
-                  result->Success(flutter::EncodableValue(true));
-                  return;
-                }
-                GlobalFree(clipboardData);
+                // Copy the text to the allocated memory
+                _tcscpy_s(clipboardText, text.length() + 1,
+                          text.c_str());
+                GlobalUnlock(clipboardData);
+                // Set the clipboard data
+                SetClipboardData(CF_UNICODETEXT,
+                                 clipboardData);
+                CloseClipboard();
+                result->Success(flutter::EncodableValue(true));
+                return;
               }
-              CloseClipboard();
+              GlobalFree(clipboardData);
             }
+            CloseClipboard();
           }
         }
       }
-      result->Success(flutter::EncodableValue(false));
+      result->Error("InvalidArgument", "Invalid or missing 'text' argument");
     }
     else
     {
