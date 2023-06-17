@@ -9,6 +9,7 @@
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar_windows.h>
 #include <flutter/standard_method_codec.h>
+#include <flutter/fml/memory/ref_counted.h>
 
 #include <memory>
 #include <sstream>
@@ -26,8 +27,8 @@ namespace vk_native_client
   // ...
 
   void VkNativeClientPlugin::HandleMethodCall(
-      const flutter::MethodCall<flutter::EncodableValue> &method_call,
-      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
+      const MethodCall<EncodableValue> &method_call,
+      std::unique_ptr<MethodResult<EncodableValue>> result)
   {
     if (method_call.method_name().compare("getPlatformVersion") == 0)
     {
@@ -45,7 +46,7 @@ namespace vk_native_client
       {
         version_stream << "7";
       }
-      result->Success(flutter::EncodableValue(version_stream.str()));
+      result->Success(EncodableValue(version_stream.str()));
     }
     else if (method_call.method_name().compare("getClipboardText") == 0)
     {
@@ -69,34 +70,34 @@ namespace vk_native_client
             LPWSTR data = static_cast<LPWSTR>(GlobalLock(clipboardData));
             if (data != nullptr)
             {
-              result->Success(flutter::EncodableValue(data));
+              result->Success(EncodableValue(data));
               GlobalUnlock(clipboardData);
             }
             else
             {
-              result->Success(flutter::EncodableValue());
+              result->Success(EncodableValue());
             }
           }
           else
           {
-            result->Success(flutter::EncodableValue());
+            result->Success(EncodableValue());
           }
           CloseClipboard();
         }
         else
         {
-          result->Success(flutter::EncodableValue());
+          result->Success(EncodableValue());
         }
       }
       else
       {
-        result->Success(flutter::EncodableValue());
+        result->Success(EncodableValue());
       }
     }
     else if (method_call.method_name().compare("setClipboardText") == 0)
     {
       // Set clipboard text
-      if (method_call.arguments().Contains("text"))
+      if (method_call.arguments().ContainsKey("text"))
       {
         const auto &text_value = method_call.arguments().at("text");
         if (text_value.IsString())
@@ -123,7 +124,7 @@ namespace vk_native_client
                 SetClipboardData(CF_UNICODETEXT,
                                  clipboardData);
                 CloseClipboard();
-                result->Success(flutter::EncodableValue(true));
+                result->Success(EncodableValue(true));
                 return;
               }
               GlobalFree(clipboardData);
