@@ -22,7 +22,8 @@ class MethodChannelVkNativeClient extends VkNativeClientPlatform {
   }
 
   @override
-  Future<void> setClipboardText(String text) async {
-    await methodChannel.invokeMethod<void>('setClipboardText', text);
+  Future<bool> setClipboardText(String text) async {
+    final result = await methodChannel.invokeMethod<bool>('setClipboardText', text);
+    return result ?? false;
   }
 }

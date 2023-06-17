@@ -61,7 +61,8 @@ class _MyAppState extends State<MyApp> {
               Text('Running on: $_platformVersion\n'),
               ElevatedButton(
                 onPressed: () async {
-                  log(await _vkNativeClientPlugin.getClipboardText() ?? '');
+                  log('test');
+                  log('text: ${await _vkNativeClientPlugin.getClipboardText()}');
                 },
                 child: const Text('Get clipboard text'),
               ),

@@ -86,7 +86,7 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
 
   /// Sets the clipboard text to the provided [text].
   @override
-  Future<void> setClipboardText(String text) async {
+  Future<bool> setClipboardText(String text) async {
     /// Write raw clipboard text to the DOM.
     final clipboard = js_util.getProperty(html.window.navigator, 'clipboard') as Clipboard;
     final items = <ClipboardItem>[
@@ -95,6 +95,7 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
       }),
     ];
     await clipboard.write(items);
+    return true;
   }
 
   Clipboard getClipboard() {
