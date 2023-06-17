@@ -50,45 +50,23 @@ namespace vk_native_client
     else if (method_call.method_name().compare("getClipboardText") == 0)
     {
       // Get clipboard text
+      bool hasClipboardText = false;
       if (IsClipboardFormatAvailable(CF_HTML))
       {
-        // Retrieve HTML data from clipboard
-        if (OpenClipboard(nullptr))
-        {
-          HANDLE clipboardData = GetClipboardData(CF_HTML);
-          if (clipboardData != nullptr)
-          {
-            LPCTSTR data = static_cast<LPCTSTR>(GlobalLock(clipboardData));
-            if (data != nullptr)
-            {
-              result->Success(flutter::EncodableValue(data));
-              GlobalUnlock(clipboardData);
-            }
-            else
-            {
-              result->Success(flutter::EncodableValue());
-            }
-          }
-          else
-          {
-            result->Success(flutter::EncodableValue());
-          }
-          CloseClipboard();
-        }
-        else
-        {
-          result->Success(flutter::EncodableValue());
-        }
+        hasClipboardText = true;
       }
       else if (IsClipboardFormatAvailable(CF_UNICODETEXT))
       {
-        // Retrieve plain text from clipboard
+        hasClipboardText = true;
+      }
+      if (hasClipboardText)
+      {
         if (OpenClipboard(nullptr))
         {
           HANDLE clipboardData = GetClipboardData(CF_UNICODETEXT);
           if (clipboardData != nullptr)
           {
-            LPCTSTR data = static_cast<LPCTSTR>(GlobalLock(clipboardData));
+            LPWSTR data = static_cast<LPWSTR>(GlobalLock(clipboardData));
             if (data != nullptr)
             {
               result->Success(flutter::EncodableValue(data));
@@ -130,16 +108,16 @@ namespace vk_native_client
             // Allocate global memory for the clipboard data
             HGLOBAL clipboardData = GlobalAlloc(
                 GMEM_MOVEABLE,
-                (text.length() + 1) * sizeof(TCHAR));
+                (text.length() + 1) * sizeof(WCHAR));
             if (clipboardData != nullptr)
             {
-              LPTSTR clipboardText =
-                  static_cast<LPTSTR>(GlobalLock(clipboardData));
+              LPWSTR clipboardText =
+                  static_cast<LPWSTR>(GlobalLock(clipboardData));
               if (clipboardText != nullptr)
               {
                 // Copy the text to the allocated memory
-                _tcscpy_s(clipboardText, text.length() + 1,
-                          text.c_str());
+                wcscpy_s(clipboardText, text.length() + 1,
+                         text.c_str());
                 GlobalUnlock(clipboardData);
                 // Set the clipboard data
                 SetClipboardData(CF_UNICODETEXT,
@@ -153,8 +131,8 @@ namespace vk_native_client
             CloseClipboard();
           }
         }
+        result->Error("InvalidArgument", "Invalid or missing 'text' argument");
       }
-      result->Error("InvalidArgument", "Invalid or missing 'text' argument");
     }
     else
     {
