@@ -10,6 +10,9 @@ class MockVkNativeClientPlatform with MockPlatformInterfaceMixin implements VkNa
 
   @override
   Future<String?> getClipboardText() => Future.value('text');
+
+  @override
+  Future<bool> setClipboardText(String text) => Future.value(true);
 }
 
 void main() {
@@ -33,5 +36,13 @@ void main() {
     VkNativeClientPlatform.instance = fakePlatform;
 
     expect(await vkNativeClientPlugin.getClipboardText(), 'text');
+  });
+
+  test('setClipboardText', () async {
+    VkNativeClient vkNativeClientPlugin = VkNativeClient();
+    MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
+    VkNativeClientPlatform.instance = fakePlatform;
+
+    expect(await vkNativeClientPlugin.setClipboardText('text'), true);
   });
 }

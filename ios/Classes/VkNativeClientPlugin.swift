@@ -64,8 +64,9 @@ public class VkNativeClientPlugin: NSObject, FlutterPlugin {
         
         if let html = call.arguments as? String {
             board.items[0][utTypeTextHtml] = html.data(using: .utf8) // Set clipboard content as HTML
+            result(true) // Completion
+            return
         }
-        
-        result(nil) // Completion
+        result(false) // No clipboard content found
     }
 }

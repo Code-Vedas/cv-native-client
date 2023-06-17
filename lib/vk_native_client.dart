@@ -9,7 +9,7 @@ class VkNativeClient {
     return VkNativeClientPlatform.instance.getClipboardText();
   }
 
-  Future<void> setClipboardText(String text) {
+  Future<bool> setClipboardText(String text) {
     return VkNativeClientPlatform.instance.setClipboardText(text);
   }
 }

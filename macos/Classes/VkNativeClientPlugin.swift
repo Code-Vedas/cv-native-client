@@ -32,8 +32,12 @@ public class VkNativeClientPlugin: NSObject, FlutterPlugin {
         case "setClipboardText":
             // Set HTML to clipboard, if not HTML, set plain text
             let pasteboard = NSPasteboard.general
-            let html = call.arguments as? String
-            pasteboard.setString(html!, forType: .html)
+             if let html = call.arguments as? String {
+                pasteboard.setString(html, forType: .html)
+                result(true)
+                return
+             }
+             result(false) // No clipboard content found
         default:
             result(FlutterMethodNotImplemented) // Method not implemented
         }

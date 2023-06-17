@@ -70,8 +70,12 @@ class VkNativeClientPlugin : FlutterPlugin, MethodCallHandler {
         val html = call.argument<String>("html")
         val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
         val clipData = ClipData.newPlainText(null, html)
-        clipboardManager?.setPrimaryClip(clipData)
-        result.success(null)
+        if (clipboardManager != null) {
+            clipboardManager.setPrimaryClip(clipData)
+            result.success(true)
+        } else {
+            result.success(false)
+        }
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
