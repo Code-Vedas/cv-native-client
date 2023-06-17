@@ -13,32 +13,17 @@
 #include <memory>
 #include <sstream>
 
+// Additional headers for clipboard access
+#include <ShlObj.h>
+#include <winuser.h>
+
 namespace vk_native_client
 {
 
-  // static
-  void VkNativeClientPlugin::RegisterWithRegistrar(
-      flutter::PluginRegistrarWindows *registrar)
-  {
-    auto channel =
-        std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-            registrar->messenger(), "vk_native_client",
-            &flutter::StandardMethodCodec::GetInstance());
+  // CF_HTML format constant
+  static const UINT CF_HTML = RegisterClipboardFormat(TEXT("HTML Format"));
 
-    auto plugin = std::make_unique<VkNativeClientPlugin>();
-
-    channel->SetMethodCallHandler(
-        [plugin_pointer = plugin.get()](const auto &call, auto result)
-        {
-          plugin_pointer->HandleMethodCall(call, std::move(result));
-        });
-
-    registrar->AddPlugin(std::move(plugin));
-  }
-
-  VkNativeClientPlugin::VkNativeClientPlugin() {}
-
-  VkNativeClientPlugin::~VkNativeClientPlugin() {}
+  // ...
 
   void VkNativeClientPlugin::HandleMethodCall(
       const flutter::MethodCall<flutter::EncodableValue> &method_call,
@@ -64,82 +49,122 @@ namespace vk_native_client
     }
     else if (method_call.method_name().compare("getClipboardText") == 0)
     {
-      // Retrieve text from the clipboard
-      std::string clipboard_text;
-
-      if (OpenClipboard(nullptr))
+      // Get clipboard text
+      if (IsClipboardFormatAvailable(CF_HTML))
       {
-        HANDLE clipboard_data = nullptr;
-
-        // Check if HTML data is available
-        clipboard_data = GetClipboardData(CF_HTML);
-        if (clipboard_data != nullptr)
+        // Retrieve HTML data from clipboard
+        if (OpenClipboard(nullptr))
         {
-          const char *html_text = static_cast<const char *>(GlobalLock(clipboard_data));
-          if (html_text != nullptr)
+          HANDLE clipboardData = GetClipboardData(CF_HTML);
+          if (clipboardData != nullptr)
           {
-            clipboard_text = std::string(html_text);
-            GlobalUnlock(clipboard_data);
-          }
-        }
-
-        // If HTML data is not available, check for plain text data
-        if (clipboard_text.empty())
-        {
-          clipboard_data = GetClipboardData(CF_TEXT);
-          if (clipboard_data != nullptr)
-          {
-            const char *text = static_cast<const char *>(GlobalLock(clipboard_data));
-            if (text != nullptr)
+            LPCTSTR data = static_cast<LPCTSTR>(GlobalLock(clipboardData));
+            if (data != nullptr)
             {
-              clipboard_text = std::string(text);
-              GlobalUnlock(clipboard_data);
+              result->Success(flutter::EncodableValue(data));
+              GlobalUnlock(clipboardData);
+            }
+            else
+            {
+              result->Success(flutter::EncodableValue());
             }
           }
+          else
+          {
+            result->Success(flutter::EncodableValue());
+          }
+          CloseClipboard();
         }
-
-        CloseClipboard();
+        else
+        {
+          result->Success(flutter::EncodableValue());
+        }
       }
-
-      if (!clipboard_text.empty())
+      else if (IsClipboardFormatAvailable(CF_UNICODETEXT))
       {
-        result->Success(flutter::EncodableValue(clipboard_text));
+        // Retrieve plain text from clipboard
+        if (OpenClipboard(nullptr))
+        {
+          HANDLE clipboardData = GetClipboardData(CF_UNICODETEXT);
+          if (clipboardData != nullptr)
+          {
+            LPCTSTR data = static_cast<LPCTSTR>(GlobalLock(clipboardData));
+            if (data != nullptr)
+            {
+              result->Success(flutter::EncodableValue(data));
+              GlobalUnlock(clipboardData);
+            }
+            else
+            {
+              result->Success(flutter::EncodableValue());
+            }
+          }
+          else
+          {
+            result->Success(flutter::EncodableValue());
+          }
+          CloseClipboard();
+        }
+        else
+        {
+          result->Success(flutter::EncodableValue());
+        }
       }
       else
       {
-        result->Error("FAILED", "Failed to retrieve clipboard text");
+        result->Success(flutter::EncodableValue());
       }
     }
     else if (method_call.method_name().compare("setClipboardText") == 0)
     {
-      // Set text in the clipboard
-      std::optional<flutter::EncodableValue> text_value = method_call.arguments();
-      if (text_value && text_value->IsString())
+      // Set clipboard text
+      if (method_call.arguments() != nullptr &&
+          method_call.arguments()->IsMap())
       {
-        std::string text = flutter::EncodableValue::ToString(text_value.value());
-        if (OpenClipboard(nullptr))
+        const auto &args_map =
+            method_call.arguments()->MapValue();
+
+        if (args_map.find(flutter::EncodableValue("text")) !=
+            args_map.end())
         {
-          HGLOBAL clipboard_data = GlobalAlloc(GMEM_MOVEABLE, text.size() + 1);
-          if (clipboard_data != nullptr)
+          const auto &text_value = args_map.at(
+              flutter::EncodableValue("text"));
+          if (text_value.IsString())
           {
-            char *clipboard_text = static_cast<char *>(GlobalLock(clipboard_data));
-            if (clipboard_text != nullptr)
+            const std::string &text =
+                text_value.StringValue();
+            if (OpenClipboard(nullptr))
             {
-              strcpy_s(clipboard_text, text.size() + 1, text.c_str());
-              GlobalUnlock(clipboard_data);
-              if (SetClipboardData(CF_TEXT, clipboard_data) != nullptr)
+              EmptyClipboard();
+              // Allocate global memory for the clipboard data
+              HGLOBAL clipboardData = GlobalAlloc(
+                  GMEM_MOVEABLE,
+                  (text.length() + 1) * sizeof(TCHAR));
+              if (clipboardData != nullptr)
               {
-                CloseClipboard();
-                result->Success();
-                return;
+                LPTSTR clipboardText =
+                    static_cast<LPTSTR>(GlobalLock(clipboardData));
+                if (clipboardText != nullptr)
+                {
+                  // Copy the text to the allocated memory
+                  _tcscpy_s(clipboardText, text.length() + 1,
+                            text.c_str());
+                  GlobalUnlock(clipboardData);
+                  // Set the clipboard data
+                  SetClipboardData(CF_UNICODETEXT,
+                                   clipboardData);
+                  CloseClipboard();
+                  result->Success(flutter::EncodableValue(true));
+                  return;
+                }
+                GlobalFree(clipboardData);
               }
+              CloseClipboard();
             }
-            GlobalFree(clipboard_data);
           }
-          CloseClipboard();
         }
       }
-      result->Error("INVALID_ARGUMENT", "Invalid text argument");
+      result->Success(flutter::EncodableValue(false));
     }
     else
     {
