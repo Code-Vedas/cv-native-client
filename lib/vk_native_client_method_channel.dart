@@ -14,4 +14,15 @@ class MethodChannelVkNativeClient extends VkNativeClientPlatform {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
+
+  @override
+  Future<String?> getClipboardText() async {
+    final text = await methodChannel.invokeMethod<String>('getClipboardText');
+    return text;
+  }
+
+  @override
+  Future<void> setClipboardText(String text) async {
+    await methodChannel.invokeMethod<void>('setClipboardText', text);
+  }
 }

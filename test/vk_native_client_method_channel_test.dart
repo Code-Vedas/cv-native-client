@@ -24,4 +24,8 @@ void main() {
   test('getPlatformVersion', () async {
     expect(await platform.getPlatformVersion(), '42');
   });
+
+  test('getClipboardText', () async {
+    expect(await platform.getClipboardText(), '42');
+  });
 }

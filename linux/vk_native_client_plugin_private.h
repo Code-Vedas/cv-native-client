@@ -8,3 +8,9 @@
 
 // Handles the getPlatformVersion method call.
 FlMethodResponse *get_platform_version();
+
+// Handles the getClipboardText method call.
+FlMethodResponse *get_clipboard_text();
+
+// Handles the setClipboardText method call.
+FlMethodResponse *set_clipboard_text(FlValue *args);

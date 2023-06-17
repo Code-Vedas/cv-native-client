@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.arb": "json",
+    "__locale": "cpp",
+    "cstring": "cpp"
+  }
+}
