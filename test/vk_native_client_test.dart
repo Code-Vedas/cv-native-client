@@ -1,21 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vk_native_client/vk_native_client.dart';
-import 'package:vk_native_client/vk_native_client_platform_interface.dart';
-import 'package:vk_native_client/vk_native_client_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:vk_native_client/vk_native_client.dart';
+import 'package:vk_native_client/vk_native_client_method_channel.dart';
+import 'package:vk_native_client/vk_native_client_platform_interface.dart';
 
 class MockVkNativeClientPlatform with MockPlatformInterfaceMixin implements VkNativeClientPlatform {
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
+  Future<String?> getPlatformVersion() => Future<String?>.value('42');
 
   @override
-  Future<String?> getClipboardText() => Future.value('text');
+  Future<String?> getClipboardText() => Future<String?>.value('text');
 
   @override
-  Future<bool> setClipboardText(String text) => Future.value(true);
+  Future<bool> setClipboardText(String text) => Future<bool>.value(true);
 
   @override
-  Future<bool> canCopyFromClipboard() => Future.value(true);
+  Future<bool> canCopyFromClipboard() => Future<bool>.value(true);
 }
 
 void main() {
@@ -26,32 +26,32 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    VkNativeClient vkNativeClientPlugin = VkNativeClient();
-    MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
+    final VkNativeClient vkNativeClientPlugin = VkNativeClient();
+    final MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
     VkNativeClientPlatform.instance = fakePlatform;
 
     expect(await vkNativeClientPlugin.getPlatformVersion(), '42');
   });
 
   test('getClipboardText', () async {
-    VkNativeClient vkNativeClientPlugin = VkNativeClient();
-    MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
+    final VkNativeClient vkNativeClientPlugin = VkNativeClient();
+    final MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
     VkNativeClientPlatform.instance = fakePlatform;
 
     expect(await vkNativeClientPlugin.getClipboardText(), 'text');
   });
 
   test('setClipboardText', () async {
-    VkNativeClient vkNativeClientPlugin = VkNativeClient();
-    MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
+    final VkNativeClient vkNativeClientPlugin = VkNativeClient();
+    final MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
     VkNativeClientPlatform.instance = fakePlatform;
 
     expect(await vkNativeClientPlugin.setClipboardText('text'), true);
   });
 
   test('canCopyFromClipboard', () async {
-    VkNativeClient vkNativeClientPlugin = VkNativeClient();
-    MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
+    final VkNativeClient vkNativeClientPlugin = VkNativeClient();
+    final MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
     VkNativeClientPlatform.instance = fakePlatform;
 
     expect(await vkNativeClientPlugin.canCopyFromClipboard(), true);

@@ -7,29 +7,29 @@ import 'vk_native_client_platform_interface.dart';
 class MethodChannelVkNativeClient extends VkNativeClientPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('vk_native_client');
+  final MethodChannel methodChannel = const MethodChannel('vk_native_client');
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final String? version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
 
   @override
   Future<String?> getClipboardText() async {
-    final text = await methodChannel.invokeMethod<String>('getClipboardText');
+    final String? text = await methodChannel.invokeMethod<String>('getClipboardText');
     return text;
   }
 
   @override
   Future<bool> setClipboardText(String text) async {
-    final result = await methodChannel.invokeMethod<bool>('setClipboardText', text);
+    final bool? result = await methodChannel.invokeMethod<bool>('setClipboardText', text);
     return result ?? false;
   }
 
   @override
   Future<bool> canCopyFromClipboard() async {
-    final result = await methodChannel.invokeMethod<bool>('canCopyFromClipboard');
+    final bool? result = await methodChannel.invokeMethod<bool>('canCopyFromClipboard');
     return result ?? false;
   }
 }

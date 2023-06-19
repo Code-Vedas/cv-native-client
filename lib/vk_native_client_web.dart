@@ -5,10 +5,11 @@
 @js.JS()
 
 import 'dart:html' as html show window, Blob;
-import 'dart:typed_data' as typed_data show ByteBuffer;
-import 'package:js/js.dart' as js show JS, staticInterop;
 import 'dart:js_util' as js_util show callMethod, getProperty, promiseToFuture;
+import 'dart:typed_data' as typed_data show ByteBuffer;
+
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:js/js.dart' as js show JS, staticInterop;
 
 import 'vk_native_client_platform_interface.dart';
 
@@ -32,16 +33,16 @@ class ClipboardItem {
 
 extension ClipboardExtension on Clipboard {
   Future<Iterable<ClipboardItem>> read() async {
-    final Future<Iterable<dynamic>> items = js_util.promiseToFuture(js_util.callMethod(this, 'read', []));
+    final Future<Iterable<dynamic>> items = js_util.promiseToFuture(js_util.callMethod(this, 'read', <Object?>[]));
     return (await items).cast<ClipboardItem>();
   }
 
-  Future<void> write(Iterable<ClipboardItem> data) => js_util.promiseToFuture(js_util.callMethod(this, 'write', [data.toList(growable: false)]));
+  Future<void> write(Iterable<ClipboardItem> data) => js_util.promiseToFuture(js_util.callMethod(this, 'write', <Object?>[data.toList(growable: false)]));
 }
 
 extension BlobExt on html.Blob {
-  Future<String?> text() => js_util.promiseToFuture(js_util.callMethod(this, 'text', []));
-  Future<typed_data.ByteBuffer?> arrayBuffer() => js_util.promiseToFuture(js_util.callMethod(this, 'arrayBuffer', []));
+  Future<String?> text() => js_util.promiseToFuture(js_util.callMethod(this, 'text', <Object?>[]));
+  Future<typed_data.ByteBuffer?> arrayBuffer() => js_util.promiseToFuture(js_util.callMethod(this, 'arrayBuffer', <Object?>[]));
 }
 
 extension ClipboardItemExtension on ClipboardItem {
@@ -51,8 +52,8 @@ extension ClipboardItemExtension on ClipboardItem {
   // ) =>
   //     js_util.callMethod(ClipboardItem, 'createDelayed', [items]);
 
-  Iterable<String> get types => (js_util.getProperty(this, 'types') as Iterable).cast<String>();
-  Future<html.Blob> getType(String type) => js_util.promiseToFuture(js_util.callMethod(this, 'getType', [type]));
+  Iterable<String> get types => (js_util.getProperty(this, 'types') as Iterable<Object>).cast<String>();
+  Future<html.Blob> getType(String type) => js_util.promiseToFuture(js_util.callMethod(this, 'getType', <Object?>[type]));
 }
 
 /// A web implementation of the VkNativeClientPlatform of the VkNativeClient plugin.
@@ -67,7 +68,7 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
   /// Returns a [String] containing the version of the platform.
   @override
   Future<String?> getPlatformVersion() async {
-    final version = html.window.navigator.userAgent;
+    final String version = html.window.navigator.userAgent;
     return version;
   }
 
@@ -75,11 +76,11 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
   @override
   Future<String?> getClipboardText() async {
     /// Read raw clipboard text from the DOM.
-    final Future<Iterable<dynamic>> items = js_util.promiseToFuture(js_util.callMethod(this, 'read', []));
+    final Future<Iterable<dynamic>> items = js_util.promiseToFuture(js_util.callMethod(this, 'read', <Object?>[]));
     final Iterable<ClipboardItem> content = (await items).cast<ClipboardItem>();
     for (final ClipboardItem item in content) {
       final html.Blob blob = await item.getType('text/html');
-      return await blob.text();
+      return blob.text();
     }
     return null;
   }
@@ -88,8 +89,8 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
   @override
   Future<bool> setClipboardText(String text) async {
     /// Write raw clipboard text to the DOM.
-    final clipboard = js_util.getProperty(html.window.navigator, 'clipboard') as Clipboard;
-    final items = <ClipboardItem>[
+    final Clipboard clipboard = js_util.getProperty(html.window.navigator, 'clipboard') as Clipboard;
+    final List<ClipboardItem> items = <ClipboardItem>[
       ClipboardItem(<String, dynamic>{
         'text/html': text,
       }),
@@ -102,7 +103,7 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
   @override
   Future<bool> canCopyFromClipboard() async {
     /// Check if the clipboard is empty.
-    final Future<Iterable<dynamic>> items = js_util.promiseToFuture(js_util.callMethod(this, 'read', []));
+    final Future<Iterable<dynamic>> items = js_util.promiseToFuture(js_util.callMethod(this, 'read', <Object?>[]));
     final Iterable<ClipboardItem> content = (await items).cast<ClipboardItem>();
     for (final ClipboardItem item in content) {
       final html.Blob blob = await item.getType('text/html');

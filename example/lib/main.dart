@@ -1,8 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:vk_native_client/vk_native_client.dart';
 
@@ -19,7 +18,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  final _vkNativeClientPlugin = VkNativeClient();
+  final VkNativeClient _vkNativeClientPlugin = VkNativeClient();
 
   @override
   void initState() {
@@ -41,7 +40,9 @@ class _MyAppState extends State<MyApp> {
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     setState(() {
       _platformVersion = platformVersion;
@@ -57,12 +58,12 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Center(
           child: Column(
-            children: [
+            children: <Widget>[
               Text('Running on: $_platformVersion\n'),
               ElevatedButton(
                 onPressed: () async {
                   if (await _vkNativeClientPlugin.canCopyFromClipboard()) {
-                    final clipboardText = await _vkNativeClientPlugin.getClipboardText();
+                    final String? clipboardText = await _vkNativeClientPlugin.getClipboardText();
                     log('Clipboard text: $clipboardText');
                   } else {
                     log('Clipboard is not available');
@@ -72,7 +73,7 @@ class _MyAppState extends State<MyApp> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  bool result = await _vkNativeClientPlugin.setClipboardText('Hello, world!');
+                  final bool result = await _vkNativeClientPlugin.setClipboardText('Hello, world!');
                   log('Clipboard text set: $result');
                 },
                 child: const Text('Set "Hello, world!" to clipboard'),

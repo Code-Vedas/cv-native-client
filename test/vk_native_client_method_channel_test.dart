@@ -5,7 +5,7 @@ import 'package:vk_native_client/vk_native_client_method_channel.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MethodChannelVkNativeClient platform = MethodChannelVkNativeClient();
+  final MethodChannelVkNativeClient platform = MethodChannelVkNativeClient();
   const MethodChannel channel = MethodChannel('vk_native_client');
 
   setUp(() {

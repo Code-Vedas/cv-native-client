@@ -1,3 +1,7 @@
+> **Warning**
+> This plugin is under development and not being tested throughly in every platform
+> Use it with caution and please report any issues you find.
+
 # VK Native Client
 
 Flutter plugin for VK Native Client.
