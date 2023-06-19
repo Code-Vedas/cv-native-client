@@ -1,5 +1,12 @@
 ## Change Log
 
+## 0.0.5
+
+- added in-development note to readme
+- made code public
+- fix linting issues
+- no real code changes
+
 ## 0.0.4
 
 - Added support for 'canCopyFromClipboard` method
