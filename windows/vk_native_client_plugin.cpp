@@ -1,5 +1,4 @@
 #include "vk_native_client_plugin.h"
-#include "clipboard.h"
 // This must be included before many other Windows headers.
 #include <windows.h>
 #include <stdlib.h>
@@ -11,8 +10,12 @@
 #include <flutter/plugin_registrar_windows.h>
 #include <flutter/standard_method_codec.h>
 
+#include <memory>
 #include <sstream>
-#include <variant>
+
+#include "src/clipboard_windows.h"
+#include "src/platform_windows.h"
+
 namespace vk_native_client
 {
   // static
@@ -45,114 +48,25 @@ namespace vk_native_client
   {
     if (method_call.method_name().compare("getPlatformVersion") == 0)
     {
-      GetVersion(std::move(result));
+      result->Success(flutter::EncodableValue(PlatformWindows::getPlatformVersion()));
     }
     else if (method_call.method_name().compare("getClipboardText") == 0)
     {
-      GetHTMLClipboard(std::move(result));
+      result->Success(flutter::EncodableMap(ClipboardWindows::getClipboardText()));
     }
     else if (method_call.method_name().compare("setClipboardText") == 0)
     {
       // Set clipboard text
-      SetHTMLClipboard(method_call, std::move(result));
+      result->Success(flutter::EncodableValue(ClipboardWindows::setClipboardText(method_call)));
     }
     else if (method_call.method_name().compare("canCopyFromClipboard") == 0)
     {
       // check if clipboard has text
-      canCopyFromClipboard(method_call, std::move(result));
+      result->Success(flutter::EncodableValue(ClipboardWindows::canCopyFromClipboard()));
     }
     else
     {
       result->NotImplemented();
     }
-  }
-  void VkNativeClientPlugin::canCopyFromClipboard(
-      const flutter::MethodCall<flutter::EncodableValue> &method_call,
-      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
-  {
-    Clipboard clipboard = Clipboard();
-    std::string *text = clipboard.getClipboardData(CF_TEXT);
-    if (text != nullptr)
-    {
-      result->Success(flutter::EncodableValue(true));
-      return;
-    }
-    std::string *unicode = clipboard.getClipboardData(CF_UNICODETEXT);
-    if (unicode != nullptr)
-    {
-      result->Success(flutter::EncodableValue(true));
-      return;
-    }
-    std::string *html = clipboard.getClipboardData(clipboard.CF_HTML);
-    if (html != nullptr)
-    {
-      result->Success(flutter::EncodableValue(true));
-      return;
-    }
-    result->Success(flutter::EncodableValue(false));
-  }
-  void VkNativeClientPlugin::GetVersion(std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
-  {
-    std::ostringstream version_stream;
-    version_stream << "Windows ";
-    if (IsWindows10OrGreater())
-    {
-      version_stream << "10+";
-    }
-    else if (IsWindows8OrGreater())
-    {
-      version_stream << "8";
-    }
-    else if (IsWindows7OrGreater())
-    {
-      version_stream << "7";
-    }
-    result->Success(flutter::EncodableValue(version_stream.str()));
-  }
-
-  void VkNativeClientPlugin::GetHTMLClipboard(std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
-  {
-    Clipboard clipboard = Clipboard();
-    std::string *html = clipboard.getClipboardData(clipboard.CF_HTML);
-    if (html != nullptr)
-    {
-      result->Success(flutter::EncodableValue(*html));
-      return;
-    }
-
-    std::string *text = clipboard.getClipboardData(CF_TEXT);
-    if (text != nullptr)
-    {
-      result->Success(flutter::EncodableValue(*text));
-      return;
-    }
-
-    std::string *unicode = clipboard.getClipboardData(CF_UNICODETEXT);
-    if (unicode != nullptr)
-    {
-      result->Success(flutter::EncodableValue(*unicode));
-      return;
-    }
-
-    result->Success(flutter::EncodableValue(nullptr));
-  }
-
-  void VkNativeClientPlugin::SetHTMLClipboard(
-      const flutter::MethodCall<flutter::EncodableValue> &method_call,
-      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
-  {
-    // Set clipboard text
-    Clipboard clipboard = Clipboard();
-    // get clipboard data from method_call.arguments
-    // argument is passed a String from flutter
-    const auto *arguments = std::get_if<flutter::EncodableValue>(method_call.arguments());
-    auto data = std::get_if<std::string>(arguments);
-    if (data == nullptr)
-    {
-      result->Success(flutter::EncodableValue(false));
-      return;
-    }
-    clipboard.setClipboardData(clipboard.CF_HTML, *data);
-    result->Success(flutter::EncodableValue(true));
   }
 }

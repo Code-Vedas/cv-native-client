@@ -26,14 +26,6 @@ namespace vk_native_client
         void HandleMethodCall(
             const flutter::MethodCall<flutter::EncodableValue> &method_call,
             std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-        void GetVersion(std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-        void GetHTMLClipboard(std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-        void SetHTMLClipboard(
-            const flutter::MethodCall<flutter::EncodableValue> &method_call,
-            std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
-        void canCopyFromClipboard(
-            const flutter::MethodCall<flutter::EncodableValue> &method_call,
-            std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     };
 
 } // namespace vk_native_client
