@@ -1,6 +1,6 @@
 name: vk_native_client
 description: Native client to access platform specific features like clipboard, platform version, etc.
-version: 0.0.5
+version: 0.0.6
 homepage: "https://github.com/Code-Vedas/vk-native-client"
 repository: "https://github.com/Code-Vedas/vk-native-client"
 documentation: "https://github.com/Code-Vedas/vk-native-client"
@@ -41,4 +41,4 @@ flutter:
         pluginClass: VkNativeClientPluginCApi
       web:
         pluginClass: VkNativeClientWeb
-        fileName: vk_native_client_web.dart
+        fileName: web/vk_native_client_web.dart

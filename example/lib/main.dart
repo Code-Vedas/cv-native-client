@@ -18,7 +18,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  final VkNativeClient _vkNativeClientPlugin = VkNativeClient();
 
   @override
   void initState() {
@@ -32,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion = await _vkNativeClientPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await VkNativeClient.getPlatformVersion() ?? 'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -62,18 +61,21 @@ class _MyAppState extends State<MyApp> {
               Text('Running on: $_platformVersion\n'),
               ElevatedButton(
                 onPressed: () async {
-                  if (await _vkNativeClientPlugin.canCopyFromClipboard()) {
-                    final String? clipboardText = await _vkNativeClientPlugin.getClipboardText();
-                    log('Clipboard text: $clipboardText');
+                  if (await VkNativeClient.canCopyFromClipboard()) {
+                    final VkClipboardData? clipboardData = await VkNativeClient.getClipboardText();
+                    log('Clipboard text: ${clipboardData?.plainText}');
+                    log('Clipboard html: ${clipboardData?.htmlText}');
                   } else {
                     log('Clipboard is not available');
                   }
                 },
                 child: const Text('Get clipboard text'),
               ),
+              // gap
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
-                  final bool result = await _vkNativeClientPlugin.setClipboardText('Hello, world!');
+                  final bool result = await VkNativeClient.setClipboardText(plainText: 'Hello, world!', htmlText: '<h1>Hello, world!</h1>');
                   log('Clipboard text set: $result');
                 },
                 child: const Text('Set "Hello, world!" to clipboard'),
