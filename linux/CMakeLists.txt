@@ -14,6 +14,10 @@ set(PLUGIN_NAME "vk_native_client_plugin")
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
   "vk_native_client_plugin.cc"
+  "src/clipboard_linux.h"
+  "src/clipboard_linux.cc"
+  "src/platform_linux.h"
+  "src/platform_linux.cc"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment

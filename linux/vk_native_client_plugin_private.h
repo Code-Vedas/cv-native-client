@@ -13,4 +13,7 @@ FlMethodResponse *get_platform_version();
 FlMethodResponse *get_clipboard_text();
 
 // Handles the setClipboardText method call.
-FlMethodResponse *set_clipboard_text(FlValue *args);
+FlMethodResponse *set_clipboard_text(FlMethodCall *method_call);
+
+// Handles the canCopyFromClipboard method call.
+FlMethodResponse *can_copy_from_clipboard();
