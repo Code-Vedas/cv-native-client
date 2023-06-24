@@ -33,17 +33,17 @@ static void vk_native_client_plugin_handle_method_call(
   {
     response = get_platform_version();
   }
-  else if (strcmp(method, "getClipboardText") == 0)
+  else if (strcmp(method, "getClipboardData") == 0)
   {
-    response = get_clipboard_text();
+    response = get_clipboard_data();
   }
   else if (strcmp(method, "canCopyFromClipboard") == 0)
   {
     response = can_copy_from_clipboard();
   }
-  else if (strcmp(method, "setClipboardText") == 0)
+  else if (strcmp(method, "setClipboardData") == 0)
   {
-    response = set_clipboard_text(method_call);
+    response = set_clipboard_data(method_call);
   }
   else
   {
@@ -66,15 +66,15 @@ FlMethodResponse *can_copy_from_clipboard()
   return FL_METHOD_RESPONSE(fl_method_success_response_new(fl_value_new_bool(canCopy)));
 }
 
-FlMethodResponse *set_clipboard_text(FlMethodCall *method_call)
+FlMethodResponse *set_clipboard_data(FlMethodCall *method_call)
 {
-  bool success = ClipboardLinux::setClipboardText(method_call);
+  bool success = ClipboardLinux::setClipboardData(method_call);
   return FL_METHOD_RESPONSE(fl_method_success_response_new(fl_value_new_bool(success)));
 }
 
-FlMethodResponse *get_clipboard_text()
+FlMethodResponse *get_clipboard_data()
 {
-  g_autoptr(FlValue) map = ClipboardLinux::getClipboardText();
+  g_autoptr(FlValue) map = ClipboardLinux::getClipboardData();
   return FL_METHOD_RESPONSE(fl_method_success_response_new(map));
 }
 

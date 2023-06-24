@@ -5,7 +5,11 @@
 
 UINT ClipboardWindows::CF_HTML = RegisterClipboardFormat(TEXT("HTML Format"));
 
-std::map<flutter::EncodableValue, flutter::EncodableValue> ClipboardWindows::getClipboardText()
+/// @brief  Get clipboard data
+/// @return Map of clipboard data with mime type as key and data as value.
+///   - plainText: String
+///   - htmlText: String
+std::map<flutter::EncodableValue, flutter::EncodableValue> ClipboardWindows::getClipboardData()
 {
   std::map<flutter::EncodableValue, flutter::EncodableValue> map;
   Clipboard clipboard = Clipboard();
@@ -39,27 +43,37 @@ std::map<flutter::EncodableValue, flutter::EncodableValue> ClipboardWindows::get
 
   return map;
 }
-bool ClipboardWindows::canCopyFromClipboard()
+
+/// @brief  Get clipboard data mime types
+/// @return Vector of clipboard data mime types.
+///   - plainText: String (if plain text is available)
+///   - htmlText: String (if html text is available)
+std::vector<flutter::EncodableValue> ClipboardWindows::getClipboardDataMimeTypes()
 {
+  std::vector<flutter::EncodableValue> mimeTypes = std::vector<flutter::EncodableValue>();
   Clipboard clipboard = Clipboard();
   std::string *text = clipboard.getClipboardData(CF_TEXT);
   if (text != nullptr)
   {
-    return true;
+    mimeTypes.push_back(flutter::EncodableValue("plainText"));
   }
   std::string *unicode = clipboard.getClipboardData(CF_UNICODETEXT);
-  if (unicode != nullptr)
+  if (unicode != nullptr && text == nullptr)
   {
-    return true;
+    mimeTypes.push_back(flutter::EncodableValue("plainText"));
   }
   std::string *html = clipboard.getClipboardData(CF_HTML);
   if (html != nullptr)
   {
-    return true;
+    mimeTypes.push_back(flutter::EncodableValue("htmlText"));
   }
-  return false;
+  return mimeTypes;
 }
-bool ClipboardWindows::setClipboardText(const flutter::MethodCall<flutter::EncodableValue> &method_call)
+
+/// @brief  Set clipboard data
+/// @param method_call - Method call from flutter.
+/// @return true if clipboard data was set successfully, false otherwise.
+bool ClipboardWindows::setClipboardData(const flutter::MethodCall<flutter::EncodableValue> &method_call)
 {
   // Set clipboard text
   Clipboard clipboard = Clipboard();

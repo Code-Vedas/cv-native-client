@@ -29,10 +29,12 @@ class VkNativeClientPlugin : FlutterPlugin, MethodCallHandler {
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         // Handle method calls from Flutter
         when (call.method) {
-            "getPlatformVersion" -> result.success("Android ${PlatformAndroid.platformVersion()}")
-            "getClipboardText" -> result.success(ClipboardAndroid.getClipboardText(context))
-            "setClipboardText" -> result.success(ClipboardAndroid.setClipboardText(call, context))
-            "canCopyFromClipboard" -> result.success(ClipboardAndroid.canCopyFromClipboard(context))
+            /// getClipboardData returns Map<String, String>
+            "getClipboardData" -> result.success(ClipboardAndroid.getClipboardData(context))
+            /// setClipboardData returns bool
+            "setClipboardData" -> result.success(ClipboardAndroid.setClipboardData(call, context))
+            /// getClipboardDataMimeTypes returns List<String>
+            "getClipboardDataMimeTypes" -> result.success(ClipboardAndroid.getClipboardDataMimeTypes(context))
             else -> result.notImplemented() // Method not implemented
         }
     }

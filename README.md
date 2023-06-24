@@ -31,10 +31,10 @@ String platformVersion = await VkNativeClient.getPlatformVersion();
 // Check if clipboard text can be copied
 bool canCopyFromClipboard = await VkNativeClient.canCopyFromClipboard();
 // Get clipboard text
-final VkClipboardData? clipboardData = await VkNativeClient.getClipboardText();
+final VkClipboardData? clipboardData = await VkNativeClient.getClipboardData();
 log('Clipboard text: ${clipboardData?.plainText}');
 log('Clipboard html: ${clipboardData?.htmlText}');
 
 // Set clipboard text
-await VkNativeClient.setClipboardText(plainText: 'text', htmlText: '<div>text</div>');
+await VkNativeClient.setClipboardData(plainText: 'text', htmlText: '<div>text</div>');
 ```

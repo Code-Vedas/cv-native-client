@@ -16,7 +16,7 @@ public:
 
     static guint kUserInfoTextPlain;
     static guint kUserInfoTextHtml;
-    static FlValue *getClipboardText();
+    static FlValue *getClipboardData();
     static bool canCopyFromClipboard();
-    static bool setClipboardText(FlMethodCall *method_call);
+    static bool setClipboardData(FlMethodCall *method_call);
 };

@@ -11,7 +11,7 @@ GdkAtom ClipboardLinux::kGdkAtomTextHtml = gdk_atom_intern_static_string(kMimeTe
 guint ClipboardLinux::kUserInfoTextPlain = 1;
 guint ClipboardLinux::kUserInfoTextHtml = 2;
 
-FlValue *ClipboardLinux::getClipboardText()
+FlValue *ClipboardLinux::getClipboardData()
 {
     auto *clipboard = gtk_clipboard_get_default(gdk_display_get_default());
     FlValue *map = fl_value_new_map();
@@ -77,7 +77,7 @@ bool ClipboardLinux::canCopyFromClipboard()
     return canCopy;
 }
 
-bool ClipboardLinux::setClipboardText(FlMethodCall *method_call)
+bool ClipboardLinux::setClipboardData(FlMethodCall *method_call)
 {
     auto *clipboard = gtk_clipboard_get_default(gdk_display_get_default());
     gtk_clipboard_set_text(clipboard, "", 0);

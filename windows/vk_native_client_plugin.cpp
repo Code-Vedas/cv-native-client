@@ -14,11 +14,9 @@
 #include <sstream>
 
 #include "src/clipboard_windows.h"
-#include "src/platform_windows.h"
 
 namespace vk_native_client
 {
-  // static
   void VkNativeClientPlugin::RegisterWithRegistrar(
       flutter::PluginRegistrarWindows *registrar)
   {
@@ -46,23 +44,20 @@ namespace vk_native_client
       const flutter::MethodCall<flutter::EncodableValue> &method_call,
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
   {
-    if (method_call.method_name().compare("getPlatformVersion") == 0)
+    if (method_call.method_name().compare("getClipboardData") == 0)
     {
-      result->Success(flutter::EncodableValue(PlatformWindows::getPlatformVersion()));
+      // Get clipboard text and html
+      result->Success(flutter::EncodableMap(ClipboardWindows::getClipboardData()));
     }
-    else if (method_call.method_name().compare("getClipboardText") == 0)
+    else if (method_call.method_name().compare("setClipboardData") == 0)
     {
-      result->Success(flutter::EncodableMap(ClipboardWindows::getClipboardText()));
+      // Set clipboard text and html
+      result->Success(flutter::EncodableValue(ClipboardWindows::setClipboardData(method_call)));
     }
-    else if (method_call.method_name().compare("setClipboardText") == 0)
+    else if (method_call.method_name().compare("getClipboardDataMimeTypes") == 0)
     {
-      // Set clipboard text
-      result->Success(flutter::EncodableValue(ClipboardWindows::setClipboardText(method_call)));
-    }
-    else if (method_call.method_name().compare("canCopyFromClipboard") == 0)
-    {
-      // check if clipboard has text
-      result->Success(flutter::EncodableValue(ClipboardWindows::canCopyFromClipboard()));
+      // Get clipboard data mime types
+      result->Success(flutter::EncodableValue(ClipboardWindows::getClipboardDataMimeTypes()));
     }
     else
     {

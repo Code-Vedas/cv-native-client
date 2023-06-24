@@ -1,5 +1,14 @@
 ## Change Log
 
+## 0.0.6
+
+- improved native implementation for Web, Android, iOS, macOS, Windows and Linux
+- removed `canCopyFromClipboard` method
+- added new method `getClipboardDataMimeTypes` to get mime types of clipboard content
+  - mime types are returned as a list of 'VKClipboardMimeType' enum values
+  - supported on Android, iOS, macOS, Windows and Linux
+- removed `platformVersion` method
+
 ## 0.0.5
 
 - added in-development note to readme
@@ -36,12 +45,12 @@ class VkNativeClient {
     return VkNativeClientPlatform.instance.getPlatformVersion();
   }
 
-  Future<String?> getClipboardText() {
-    return VkNativeClientPlatform.instance.getClipboardText();
+  Future<String?> getClipboardData() {
+    return VkNativeClientPlatform.instance.getClipboardData();
   }
 
-  Future<bool> setClipboardText(String text) {
-    return VkNativeClientPlatform.instance.setClipboardText(text);
+  Future<bool> setClipboardData(String text) {
+    return VkNativeClientPlatform.instance.setClipboardData(text);
   }
 }
 ```

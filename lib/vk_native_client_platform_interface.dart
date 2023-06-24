@@ -23,19 +23,36 @@ abstract class VkNativeClientPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() async {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+  /// get clipboard data from the clipboard asynchronously.
+  ///
+  /// Returns:
+  /// - Future<Map<String, String>?>: a [Map] containing the clipboard data.
+  ///   - 'plainText': [String] containing the plain text from the clipboard.
+  ///   - 'htmlText': [String] containing the html text from the clipboard.
+  Future<Map<String, String>?> getClipboardData() async {
+    throw UnimplementedError('getClipboardData() has not been implemented.');
   }
 
-  Future<Map<String, String>?> getClipboardText() async {
-    throw UnimplementedError('getClipboardText() has not been implemented.');
+  /// Writes the provided [text] to the clipboard asynchronously.
+  ///
+  /// Parameters:
+  /// - params: [Map<String, String>] containing the clipboard data.
+  ///   - 'plainText': [String] containing the plain text to write to the clipboard.
+  ///   - 'htmlText': [String] containing the html text to write to the clipboard.
+  ///
+  /// Returns:
+  /// - Future<bool>: [bool] indicating whether the clipboard write was successful.
+  Future<bool> setClipboardData(Map<String, String> params) async {
+    throw UnimplementedError('setClipboardData() has not been implemented.');
   }
 
-  Future<bool> setClipboardText(Map<String, String> params) async {
-    throw UnimplementedError('setClipboardText() has not been implemented.');
-  }
-
-  Future<bool> canCopyFromClipboard() async {
-    throw UnimplementedError('canCopyFromClipboard() has not been implemented.');
+  /// Retrieves the mime types of the content currently available in the clipboard asynchronously.
+  ///
+  /// Returns:
+  /// - Future<List<String>>: [List] of [String]s containing the mime types of the content currently available in the clipboard.
+  ///   - 'plainText': [String] containing the plain text from the clipboard.
+  ///   - 'htmlText': [String] containing the html text from the clipboard.
+  Future<List<String>> getClipboardDataMimeTypes() async {
+    throw UnimplementedError('getAvailableMimeTypes() has not been implemented.');
   }
 }

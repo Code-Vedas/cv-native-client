@@ -4,8 +4,36 @@ import FlutterMacOS
 // ClipboardMacOS class
 public class ClipboardMacOS {
     
-    // Set text in the clipboard
-    static func setClipboardText(call: FlutterMethodCall) -> Bool {
+    /// get clipboard data as a map
+    /// 
+    /// Returns:
+    /// - Map<String, String> - clipboard data
+    ///     - "plainText" - plain text
+    ///     - "htmlText" - html text
+    static func getClipboardData()-> [String: String]? {        
+        // Initialize result map
+        var result = [String: String]()
+        // Get HTML from clipboard, if not HTML, return plain text
+        let board = NSPasteboard.general
+        
+        if let html = board.string(forType: .html) ?? getRtfAsHtml() {
+            result["htmlText"] = html // add htmlText to result map
+        }
+        if let text = board.string(forType: .string) {
+            result["plainText"] = text // add plainText to result map
+        }
+        
+        return result // Return result map
+    }
+
+    /// set clipboard data from a map
+    ///
+    /// Parameters:
+    /// - call: FlutterMethodCall - method call from Flutter
+    ///
+    /// Returns:
+    /// - Bool - true if clipboard content is set
+    static func setClipboardData(call: FlutterMethodCall) -> Bool {
         // Set HTML to clipboard, if not HTML, set plain text
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
@@ -23,28 +51,22 @@ public class ClipboardMacOS {
         return isPlainTextSet && isHtmlTextSet // Return true if clipboard content is set
     }
     
-    // Check if clipboard is available
-    static func canCopyFromClipboard() -> Bool {
-        let isText = NSPasteboard.general.data(forType: .string) != nil
-        let isHtml = NSPasteboard.general.data(forType: .html) != nil
-        let isRtf = NSPasteboard.general.data(forType: .rtf) != nil
-        return isText || isHtml || isRtf // Return true if clipboard content found, false otherwise
-    }
-    
-    // Retrieve text from the clipboard, return map with plainText and htmlText
-    static func getClipboardText()-> [String: String]? {        // Initialize result map
-        var result = [String: String]()
-        // Get HTML from clipboard, if not HTML, return plain text
+    /// get clipboard data mime types
+    ///
+    /// Returns:
+    /// - [String]? - array of mime types
+    ///     - "plainText" - plain text
+    ///     - "htmlText" - html text
+    static func getClipboardDataMimeTypes() -> [String]? {
         let board = NSPasteboard.general
-        
-        if let html = board.string(forType: .html) ?? getRtfAsHtml() {
-            result["htmlText"] = html // add htmlText to result map
+        var result = [String]()
+        if board.string(forType: .string) != nil {
+            result.append("plainText")
         }
-        if let text = board.string(forType: .string) {
-            result["plainText"] = text // add plainText to result map
+        if board.string(forType: .html) != nil || getRtfAsHtml() != nil {
+            result.append("htmlText")
         }
-        
-        return result // Return result map
+        return result
     }
     
     // Convert RTF data to HTML

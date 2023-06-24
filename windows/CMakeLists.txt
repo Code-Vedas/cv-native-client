@@ -20,8 +20,6 @@ list(APPEND PLUGIN_SOURCES
   "src/clipboard.h"
   "src/clipboard_windows.cpp"
   "src/clipboard_windows.h"
-  "src/platform_windows.h"
-  "src/platform_windows.cpp"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment

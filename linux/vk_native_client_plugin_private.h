@@ -9,11 +9,11 @@
 // Handles the getPlatformVersion method call.
 FlMethodResponse *get_platform_version();
 
-// Handles the getClipboardText method call.
-FlMethodResponse *get_clipboard_text();
+// Handles the getClipboardData method call.
+FlMethodResponse *get_clipboard_data();
 
-// Handles the setClipboardText method call.
-FlMethodResponse *set_clipboard_text(FlMethodCall *method_call);
+// Handles the setClipboardData method call.
+FlMethodResponse *set_clipboard_data(FlMethodCall *method_call);
 
 // Handles the canCopyFromClipboard method call.
 FlMethodResponse *can_copy_from_clipboard();

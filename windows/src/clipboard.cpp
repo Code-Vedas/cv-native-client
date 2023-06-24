@@ -1,6 +1,10 @@
 #include "Clipboard.h"
 #include <iostream>
 #include <vector>
+
+/// @brief Get clipboard data
+/// @param format - Clipboard format
+/// @return String of clipboard data
 std::string *Clipboard::getClipboardData(int format)
 {
   std::string str;
@@ -33,6 +37,10 @@ void Clipboard::clearClipboard()
   }
 }
 
+/// @brief Set clipboard data
+/// @param format - Clipboard format
+/// @param data - Clipboard data
+/// @return True if successful otherwise false
 void Clipboard::setClipboardData(int format, std::string data)
 {
   if (OpenClipboard(nullptr))
@@ -48,6 +56,9 @@ void Clipboard::setClipboardData(int format, std::string data)
   }
 }
 
+/// @brief Get clipboard data
+/// @param htmlString - HTML string
+/// @return HTML string with Windows clipboard header and footer
 std::string Clipboard::htmlToWindowsFragment(std::string htmlString)
 {
   // Create HTML clipboard header
@@ -82,6 +93,9 @@ std::string Clipboard::htmlToWindowsFragment(std::string htmlString)
   return clipboardData;
 }
 
+/// @brief Get clipboard data
+/// @param fragmentHTML - HTML fragment
+/// @return HTML fragment without Windows clipboard header and footer
 std::string Clipboard::windowsFragmentToHtml(std::string fragmentHTML)
 {
   // Find the start and end fragment markers in the fragment HTML

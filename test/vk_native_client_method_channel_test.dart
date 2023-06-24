@@ -12,7 +12,10 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
       channel,
       (MethodCall methodCall) async {
-        return '42';
+        return <String, String>{
+          'plainText': '42',
+          'htmlText': '<p>42</p>',
+        };
       },
     );
   });
@@ -21,11 +24,8 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await platform.getPlatformVersion(), '42');
-  });
-
-  test('getClipboardText', () async {
-    expect(await platform.getClipboardText(), '42');
+  test('getClipboardData', () async {
+    expect((await platform.getClipboardData())!['plainText'], '42');
+    expect((await platform.getClipboardData())!['htmlText'], '<p>42</p>');
   });
 }

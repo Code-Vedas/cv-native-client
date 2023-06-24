@@ -8,17 +8,13 @@ public class ClipboardIOS {
     private static let utTypeTextHtml = "public.html"
     private static let utTypeTextRtf = "public.rtf"
     
-    // Check if clipboard is available
-    static func canCopyFromClipboard() -> Bool {
-        let board = UIPasteboard.general
-        let htmlData = board.data(forPasteboardType: utTypeTextHtml)
-        let rtfData = board.data(forPasteboardType: utTypeTextRtf)
-        let plainData = board.string
-        return htmlData != nil || rtfData != nil || plainData != nil // Return true if clipboard is available
-    }
-    
-    // Retrieve text from the clipboard, return map with plainText and htmlText
-    static func getClipboardText()-> [String: String]? {
+    /// get clipboard data as a map
+    /// 
+    /// Returns:
+    /// - Map<String, String> - clipboard data
+    ///     - "plainText" - plain text
+    ///     - "htmlText" - html text
+    static func getClipboardData()-> [String: String]? {
         let board = UIPasteboard.general
         // Initialize result map
         var result = [String: String]()
@@ -38,8 +34,14 @@ public class ClipboardIOS {
         return result // Return result map
     }
     
-    // Set text in the clipboard
-    static func setClipboardText(call: FlutterMethodCall) -> Bool {
+    /// set clipboard data from a map
+    ///
+    /// Parameters:
+    /// - call: FlutterMethodCall - method call from Flutter
+    ///
+    /// Returns:
+    /// - Bool - true if clipboard content is set
+    static func setClipboardData(call: FlutterMethodCall) -> Bool {
         let pasteboard = UIPasteboard.general
         pasteboard.items = [[:]] // Clear clipboard items
         
@@ -52,5 +54,30 @@ public class ClipboardIOS {
         pasteboard.string = plainText
         pasteboard.items[0][utTypeTextHtml] = htmlText.data(using: .utf8)
         return true // Return true if clipboard content is set
+    }
+    
+    /// get clipboard data mime types
+    ///
+    /// Returns:
+    /// - [String]? - array of mime types
+    ///     - "plainText" - plain text
+    ///     - "htmlText" - html text
+    static func getClipboardDataMimeTypes() -> [String]? {
+        let board = UIPasteboard.general
+        var result = [String]()
+        if board.string != nil {
+            /// Clipboard contains plain text
+            result.append("plainText")
+        }
+        if board.data(forPasteboardType: utTypeTextHtml) != nil {
+            /// Clipboard contains html text
+            result.append("htmlText")
+        }
+        if board.data(forPasteboardType: utTypeTextRtf) != nil {
+            /// Clipboard contains rtf text, rtf will be converted to html
+            /// so we add htmlText to result
+            result.append("htmlText")
+        }
+        return result
     }
 }

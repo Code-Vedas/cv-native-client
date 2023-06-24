@@ -9,27 +9,42 @@ class MethodChannelVkNativeClient extends VkNativeClientPlatform {
   @visibleForTesting
   final MethodChannel methodChannel = const MethodChannel('vk_native_client');
 
+  /// get clipboard data from the clipboard asynchronously.
+  ///
+  /// Returns:
+  /// - Future<Map<String, String>?>: a [Map] containing the clipboard data.
+  ///   - 'plainText': [String] containing the plain text from the clipboard.
+  ///   - 'htmlText': [String] containing the html text from the clipboard.
   @override
-  Future<String?> getPlatformVersion() async {
-    final String? version = await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
-  }
-
-  @override
-  Future<Map<String, String>?> getClipboardText() async {
-    final Map<String, String>? text = await methodChannel.invokeMapMethod<String, String>('getClipboardText');
+  Future<Map<String, String>?> getClipboardData() async {
+    final Map<String, String>? text = await methodChannel.invokeMapMethod<String, String>('getClipboardData');
     return text;
   }
 
+  /// Writes the provided [text] to the clipboard asynchronously.
+  ///
+  /// Parameters:
+  /// - params: [Map<String, String>] containing the clipboard data.
+  ///   - 'plainText': [String] containing the plain text to write to the clipboard.
+  ///   - 'htmlText': [String] containing the html text to write to the clipboard.
+  ///
+  /// Returns:
+  /// - Future<bool>: [bool] indicating whether the clipboard write was successful.
   @override
-  Future<bool> setClipboardText(Map<String, String> params) async {
-    final bool? result = await methodChannel.invokeMethod<bool>('setClipboardText', params);
+  Future<bool> setClipboardData(Map<String, String> params) async {
+    final bool? result = await methodChannel.invokeMethod<bool>('setClipboardData', params);
     return result ?? false;
   }
 
+  /// Retrieves the mime types of the content currently available in the clipboard asynchronously.
+  ///
+  /// Returns:
+  /// - Future<List<String>>: [List] of [String]s containing the mime types of the content currently available in the clipboard.
+  ///   - 'plainText': [String] containing the plain text from the clipboard.
+  ///   - 'htmlText': [String] containing the html text from the clipboard.
   @override
-  Future<bool> canCopyFromClipboard() async {
-    final bool? result = await methodChannel.invokeMethod<bool>('canCopyFromClipboard');
-    return result ?? false;
+  Future<List<String>> getClipboardDataMimeTypes() async {
+    final List<String>? mimeTypes = await methodChannel.invokeListMethod<String>('getClipboardDataMimeTypes');
+    return mimeTypes ?? <String>[];
   }
 }

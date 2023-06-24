@@ -6,16 +6,13 @@ import 'package:vk_native_client/vk_native_client_platform_interface.dart';
 
 class MockVkNativeClientPlatform with MockPlatformInterfaceMixin implements VkNativeClientPlatform {
   @override
-  Future<String?> getPlatformVersion() => Future<String?>.value('42');
+  Future<Map<String, String>?> getClipboardData() => Future<Map<String, String>?>.value(<String, String>{'plainText': 'text', 'htmlText': '<p>text</p>'});
 
   @override
-  Future<Map<String, String>?> getClipboardText() => Future<Map<String, String>?>.value(<String, String>{'plainText': 'text', 'htmlText': '<p>text</p>'});
+  Future<bool> setClipboardData(Map<String, String> params) => Future<bool>.value(true);
 
   @override
-  Future<bool> setClipboardText(Map<String, String> params) => Future<bool>.value(true);
-
-  @override
-  Future<bool> canCopyFromClipboard() => Future<bool>.value(true);
+  Future<List<String>> getClipboardDataMimeTypes() => Future<List<String>>.value(<String>['plainText', 'htmlText']);
 }
 
 void main() {
@@ -25,32 +22,25 @@ void main() {
     expect(initialPlatform, isInstanceOf<MethodChannelVkNativeClient>());
   });
 
-  test('getPlatformVersion', () async {
+  test('getClipboardData', () async {
     final MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
     VkNativeClientPlatform.instance = fakePlatform;
 
-    expect(await VkNativeClient.getPlatformVersion(), '42');
+    expect((await VkNativeClient.getClipboardData())!.plainText, 'text');
+    expect((await VkNativeClient.getClipboardData())!.htmlText, '<p>text</p>');
   });
 
-  test('getClipboardText', () async {
+  test('setClipboardData', () async {
     final MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
     VkNativeClientPlatform.instance = fakePlatform;
 
-    expect((await VkNativeClient.getClipboardText())!.plainText, 'text');
-    expect((await VkNativeClient.getClipboardText())!.htmlText, '<p>text</p>');
+    expect(await VkNativeClient.setClipboardData(const VkClipboardData(plainText: 'text', htmlText: '<p>text</p>')), true);
   });
 
-  test('setClipboardText', () async {
+  test('getClipboardDataMimeTypes', () async {
     final MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
     VkNativeClientPlatform.instance = fakePlatform;
 
-    expect(await VkNativeClient.setClipboardText(plainText: 'text', htmlText: '<div>text</div>'), true);
-  });
-
-  test('canCopyFromClipboard', () async {
-    final MockVkNativeClientPlatform fakePlatform = MockVkNativeClientPlatform();
-    VkNativeClientPlatform.instance = fakePlatform;
-
-    expect(await VkNativeClient.canCopyFromClipboard(), true);
+    expect(await VkNativeClient.getClipboardDataMimeTypes(), <VKClipboardMimeType>[VKClipboardMimeType.plainText, VKClipboardMimeType.htmlText]);
   });
 }

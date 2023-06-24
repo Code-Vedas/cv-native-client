@@ -11,14 +11,12 @@ public class VkNativeClientPlugin: NSObject, FlutterPlugin {
     // Handle method calls from Flutter
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
-        case "getPlatformVersion":
-            result("iOS " + PlatformIOS.getPlatformVersion()) // Return iOS version
-        case "getClipboardText":
-            result(ClipboardIOS.getClipboardText()) // Get clipboard text
-        case "setClipboardText":
-            result(ClipboardIOS.setClipboardText(call: call)) // Set clipboard text
-        case "canCopyFromClipboard":
-            result(ClipboardIOS.canCopyFromClipboard()) // Check if clipboard is available
+        case "getClipboardData":
+            result(ClipboardIOS.getClipboardData()) // Get clipboard data
+        case "setClipboardData":
+            result(ClipboardIOS.setClipboardData(call: call)) // Set clipboard data
+        case "getClipboardDataMimeTypes":
+            result(ClipboardIOS.getClipboardDataMimeTypes()) // Get clipboard data MIME types
         default:
             result(FlutterMethodNotImplemented) // Method not implemented
         }
