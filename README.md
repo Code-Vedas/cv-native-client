@@ -28,13 +28,15 @@ import 'package:vk_native_client/vk_native_client.dart';
 // Get platform version
 String platformVersion = await VkNativeClient.getPlatformVersion();
 
-// Check if clipboard text can be copied
-bool canCopyFromClipboard = await VkNativeClient.canCopyFromClipboard();
-// Get clipboard text
+// Get clipboard data mime types
+final List<VKClipboardMimeType> mimeTypes = await VkNativeClient.getClipboardDataMimeTypes();
+log('Clipboard mime types: $mimeTypes');
+
+// Get clipboard Data
 final VkClipboardData? clipboardData = await VkNativeClient.getClipboardData();
 log('Clipboard text: ${clipboardData?.plainText}');
 log('Clipboard html: ${clipboardData?.htmlText}');
 
-// Set clipboard text
-await VkNativeClient.setClipboardData(plainText: 'text', htmlText: '<div>text</div>');
+// Set clipboard Data
+await VkNativeClient.setClipboardData(VkClipboardData(plainText: 'Hello World!', htmlText: '<b>Hello World!</b>'));
 ```
