@@ -1,8 +1,4 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:vk_native_client/vk_native_client.dart';
 
 void main() {
@@ -17,36 +13,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final VkNativeClient _vkNativeClientPlugin = VkNativeClient();
-
+  List<String> logs = <String>[];
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion = await _vkNativeClientPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
+    logs = <String>[];
   }
 
   @override
@@ -54,34 +25,95 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('VK Native Client Example App'),
         ),
         body: Center(
           child: Column(
             children: <Widget>[
-              Text('Running on: $_platformVersion\n'),
-              ElevatedButton(
-                onPressed: () async {
-                  if (await _vkNativeClientPlugin.canCopyFromClipboard()) {
-                    final String? clipboardText = await _vkNativeClientPlugin.getClipboardText();
-                    log('Clipboard text: $clipboardText');
-                  } else {
-                    log('Clipboard is not available');
-                  }
-                },
-                child: const Text('Get clipboard text'),
+              // gap
+              const SizedBox(height: 16),
+              Wrap(
+                runSpacing: 8.0,
+                children: buttons,
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  final bool result = await _vkNativeClientPlugin.setClipboardText('Hello, world!');
-                  log('Clipboard text set: $result');
-                },
-                child: const Text('Set "Hello, world!" to clipboard'),
-              ),
+              // gap
+              const SizedBox(height: 16),
+              // logs
+              const Text('Logs:'),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    // rest of the space
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: logs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Text(logs[(logs.length - 1) - index]);
+                      },
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  List<Widget> get buttons {
+    return <Widget>[
+      ElevatedButton(
+        onPressed: () async {
+          final List<VKClipboardMimeType> mimeTypes = await VkNativeClient.getClipboardDataMimeTypes();
+          logs.add('');
+          logs.add('${DateTime.now()}: Clipboard mime types: $mimeTypes');
+          setState(() {});
+        },
+        child: const Text('Get clipboard mime types'),
+      ),
+      // gap
+      const SizedBox(width: 16),
+      ElevatedButton(
+        onPressed: () async {
+          final VkClipboardData? clipboardData = await VkNativeClient.getClipboardData();
+          logs.add('');
+          logs.add('plainText: ${clipboardData?.plainText}');
+          logs.add('htmlText: ${clipboardData?.htmlText}');
+          logs.add('${DateTime.now()}: Clipboard data:');
+          setState(() {});
+        },
+        child: const Text('Get clipboard text'),
+      ),
+      // gap
+      const SizedBox(width: 16),
+      ElevatedButton(
+        onPressed: () async {
+          const VkClipboardData data = VkClipboardData(
+            plainText: 'Hello, world!',
+            htmlText: '<p>Hello, world!</p>',
+          );
+          final bool result = await VkNativeClient.setClipboardData(data);
+          logs.add('');
+          logs.add('${DateTime.now()}: Clipboard set: $result');
+          setState(() {});
+        },
+        child: const Text('Set "Hello, world!" to clipboard'),
+      ),
+      // gap
+      const SizedBox(width: 16),
+      // clear logs
+      ElevatedButton(
+        onPressed: () {
+          logs.clear();
+          setState(() {});
+        },
+        child: const Text('Clear logs'),
+      ),
+    ];
   }
 }

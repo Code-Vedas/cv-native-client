@@ -19,30 +19,33 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
-#define FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
+#pragma once
+#include <string>
+#include <windows.h>
 
-#include <flutter_linux/flutter_linux.h>
-
-G_BEGIN_DECLS
-
-#ifdef FLUTTER_PLUGIN_IMPL
-#define FLUTTER_PLUGIN_EXPORT __attribute__((visibility("default")))
-#else
-#define FLUTTER_PLUGIN_EXPORT
-#endif
-
-typedef struct _VkNativeClientPlugin VkNativeClientPlugin;
-typedef struct
+/// class Clipboard
+class Clipboard
 {
-  GObjectClass parent_class;
-} VkNativeClientPluginClass;
+public:
+  /// @brief Get clipboard data
+  /// @param format - Clipboard format
+  /// @return String of clipboard data
+  std::string *getClipboardData(int format);
 
-FLUTTER_PLUGIN_EXPORT GType vk_native_client_plugin_get_type();
+  /// @brief Set clipboard data
+  /// @param format - Clipboard format
+  /// @param data - Clipboard data
+  /// @return True if successful otherwise false
+  void setClipboardData(int format, std::string data);
 
-FLUTTER_PLUGIN_EXPORT void vk_native_client_plugin_register_with_registrar(
-    FlPluginRegistrar *registrar);
+  /// @brief htmlToWindowsFragment
+  /// @param htmlString - HTML string
+  /// @return Windows fragment of HTML string
+  std::string htmlToWindowsFragment(std::string htmlString);
 
-G_END_DECLS
-
-#endif // FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
+  /// @brief windowsFragmentToHtml
+  /// @param fragment - Windows fragment of HTML string
+  /// @return HTML string
+  std::string windowsFragmentToHtml(std::string fragment);
+  void clearClipboard();
+};

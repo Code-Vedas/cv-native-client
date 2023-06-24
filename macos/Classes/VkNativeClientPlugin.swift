@@ -1,3 +1,24 @@
+// MIT License
+//
+// Copyright (c) 2023 Code Vedas
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 import Cocoa
 import FlutterMacOS
 
@@ -16,50 +37,16 @@ public class VkNativeClientPlugin: NSObject, FlutterPlugin {
     // Handle method calls from Flutter
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
-        case "getPlatformVersion":
-            result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString) // Return macOS version
-        case "getClipboardText":
-            // Get HTML from clipboard, if not HTML, return plain text
-            let board = NSPasteboard.general
-            
-            if let html = board.string(forType: .html) ?? getRtfAsHtml() {
-                result(html) // Return HTML text
-            } else if let text = board.string(forType: .string) {
-                result(text) // Return plain text
-            } else {
-                result(nil) // No clipboard content found
-            }
-        case "setClipboardText":
-            // Set HTML to clipboard, if not HTML, set plain text
-            let pasteboard = NSPasteboard.general
-             if let html = call.arguments as? String {
-                pasteboard.setString(html, forType: .html)
-                result(true)
-                return
-             }
-             result(false) // No clipboard content found
-        case "canCopyFromClipboard":
-            let html = call.arguments as? String 
-            result(html != nil) // Return true if clipboard is available
+        case "getClipboardData":
+            result(ClipboardMacOS.getClipboardData()) // Get clipboard data
+        case "setClipboardData":
+            result(ClipboardMacOS.setClipboardData(call: call)) // Set clipboard data
+        case "getClipboardDataMimeTypes":
+            result(ClipboardMacOS.getClipboardDataMimeTypes()) // Get clipboard data MIME types
         default:
             result(FlutterMethodNotImplemented) // Method not implemented
         }
     }
     
-    // Convert RTF data to HTML
-    func getRtfAsHtml() -> String? {
-        guard let boardRtf = NSPasteboard.general.data(forType: .rtf) else {
-            return nil
-        }
-        guard let attrStr = NSAttributedString(rtf: boardRtf, documentAttributes: nil) else {
-            return nil
-        }
-        guard let htmlData = try? attrStr.data(
-            from: NSRange(location: 0, length: attrStr.length),
-            documentAttributes: [.documentType: NSAttributedString.DocumentType.html])
-        else {
-            return nil
-        }
-        return String(data: htmlData, encoding: String.Encoding.utf8)
-    }
+    
 }

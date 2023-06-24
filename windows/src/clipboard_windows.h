@@ -19,30 +19,32 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
-#define FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
+#pragma once
+#include <string>
+#include <windows.h>
+#include <flutter/standard_method_codec.h>
 
-#include <flutter_linux/flutter_linux.h>
-
-G_BEGIN_DECLS
-
-#ifdef FLUTTER_PLUGIN_IMPL
-#define FLUTTER_PLUGIN_EXPORT __attribute__((visibility("default")))
-#else
-#define FLUTTER_PLUGIN_EXPORT
-#endif
-
-typedef struct _VkNativeClientPlugin VkNativeClientPlugin;
-typedef struct
+/// class ClipboardWindows
+class ClipboardWindows
 {
-  GObjectClass parent_class;
-} VkNativeClientPluginClass;
+public:
+  /// @brief Get clipboard data
+  static UINT CF_HTML;
 
-FLUTTER_PLUGIN_EXPORT GType vk_native_client_plugin_get_type();
+  /// @brief Get clipboard data
+  /// @return Map of clipboard data with mime type as key and data as value.
+  ///   - plainText: String (if plain text is available)
+  ///   - htmlText: String (if html text is available)
+  static std::map<flutter::EncodableValue, flutter::EncodableValue> getClipboardData();
 
-FLUTTER_PLUGIN_EXPORT void vk_native_client_plugin_register_with_registrar(
-    FlPluginRegistrar *registrar);
+  /// @brief Get clipboard data mime types
+  /// @return Vector of clipboard data mime types.
+  ///   - plainText: String (if plain text is available)
+  ///   - htmlText: String (if html text is available)
+  static std::vector<flutter::EncodableValue> getClipboardDataMimeTypes();
 
-G_END_DECLS
-
-#endif // FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
+  /// @brief Set clipboard data
+  /// @param method_call - Method call
+  /// @return True if successful otherwise false
+  static bool setClipboardData(const flutter::MethodCall<flutter::EncodableValue> &method_call);
+};

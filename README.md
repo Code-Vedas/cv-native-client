@@ -17,7 +17,7 @@ Add this to your package's pubspec.yaml file:
 
 ```yaml
 dependencies:
-  vk_native_client: ^0.0.4
+  vk_native_client: ^0.0.6
 ```
 
 ### Example
@@ -26,14 +26,15 @@ dependencies:
 import 'package:vk_native_client/vk_native_client.dart';
 
 // Get platform version
-String platformVersion = await VkNativeClient().getPlatformVersion();
-
-// Get clipboard text
-String clipboardText = await VkNativeClient().getClipboardText();
-
-// Set clipboard text
-await VkNativeClient().setClipboardText('Hello, world!');
+String platformVersion = await VkNativeClient.getPlatformVersion();
 
 // Check if clipboard text can be copied
-bool canCopyFromClipboard = await VkNativeClient().canCopyFromClipboard();
+bool canCopyFromClipboard = await VkNativeClient.canCopyFromClipboard();
+// Get clipboard text
+final VkClipboardData? clipboardData = await VkNativeClient.getClipboardData();
+log('Clipboard text: ${clipboardData?.plainText}');
+log('Clipboard html: ${clipboardData?.htmlText}');
+
+// Set clipboard text
+await VkNativeClient.setClipboardData(plainText: 'text', htmlText: '<div>text</div>');
 ```

@@ -19,30 +19,36 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
-#define FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
+import 'package:flutter/material.dart';
 
-#include <flutter_linux/flutter_linux.h>
+/// A class that represents the data that can be copied to the clipboard.
+@immutable
+final class VkClipboardData {
+  /// Constructs a [VkClipboardData].
+  ///
+  /// Parameters:
+  /// - [plainText]: The plain text to copy to the clipboard.
+  /// - [htmlText]: The HTML text to copy to the clipboard.
+  const VkClipboardData({
+    required this.plainText,
+    required this.htmlText,
+  });
 
-G_BEGIN_DECLS
+  /// The plain text to copy to the clipboard.
+  final String plainText;
 
-#ifdef FLUTTER_PLUGIN_IMPL
-#define FLUTTER_PLUGIN_EXPORT __attribute__((visibility("default")))
-#else
-#define FLUTTER_PLUGIN_EXPORT
-#endif
+  /// The HTML text to copy to the clipboard.
+  final String htmlText;
+}
 
-typedef struct _VkNativeClientPlugin VkNativeClientPlugin;
-typedef struct
-{
-  GObjectClass parent_class;
-} VkNativeClientPluginClass;
+/// An enum that represents the mime types of the content currently available in the clipboard.
+///
+/// - [plainText]: [String] containing the plain text from the clipboard.
+/// - [htmlText]: [String] containing the html text from the clipboard.
+enum VKClipboardMimeType {
+  /// Plain text.
+  plainText,
 
-FLUTTER_PLUGIN_EXPORT GType vk_native_client_plugin_get_type();
-
-FLUTTER_PLUGIN_EXPORT void vk_native_client_plugin_register_with_registrar(
-    FlPluginRegistrar *registrar);
-
-G_END_DECLS
-
-#endif // FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
+  /// HTML text.
+  htmlText,
+}

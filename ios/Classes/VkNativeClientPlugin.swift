@@ -1,14 +1,25 @@
+// MIT License
+//
+// Copyright (c) 2023 Code Vedas
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 import Flutter
-import UniformTypeIdentifiers
-
-// MIME types
-let mimeTextPlain = "text/plain"
-let mimeTextHtml = "text/html"
-
-// UT (Uniform Type) identifiers
-let utTypeTextPlain = "public.text"
-let utTypeTextHtml = "public.html"
-let utTypeTextRtf = "public.rtf"
 
 public class VkNativeClientPlugin: NSObject, FlutterPlugin {
     // Register the plugin with the Flutter engine
@@ -21,63 +32,14 @@ public class VkNativeClientPlugin: NSObject, FlutterPlugin {
     // Handle method calls from Flutter
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
-        case "getPlatformVersion":
-            result("iOS " + UIDevice.current.systemVersion) // Return iOS version
-        case "getClipboardText":
-            getClipboardText(result: result) // Get clipboard text
-        case "setClipboardText":
-            setClipboardText(call: call, result: result) // Set clipboard text
-        case "canCopyFromClipboard":
-            result(canCopyFromClipboard()) // Check if clipboard is available    
+        case "getClipboardData":
+            result(ClipboardIOS.getClipboardData()) // Get clipboard data
+        case "setClipboardData":
+            result(ClipboardIOS.setClipboardData(call: call)) // Set clipboard data
+        case "getClipboardDataMimeTypes":
+            result(ClipboardIOS.getClipboardDataMimeTypes()) // Get clipboard data MIME types
         default:
             result(FlutterMethodNotImplemented) // Method not implemented
         }
-    }
-
-    // Check if clipboard is available
-    private func canCopyFromClipboard(result: @escaping FlutterResult) -> Bool {
-        let board = UIPasteboard.general
-        let htmlData = board.data(forPasteboardType: utTypeTextHtml)
-        let rtfData = board.data(forPasteboardType: utTypeTextRtf)
-        let plainData = board.string
-        result(htmlData != nil || rtfData != nil || plainData != nil) // Return true if clipboard is available
-    }    
-
-    // Retrieve text from the clipboard
-    private func getClipboardText(result: @escaping FlutterResult) {
-        let board = UIPasteboard.general
-        if let htmlData = board.data(forPasteboardType: utTypeTextHtml) {
-            let html = String(data: htmlData, encoding: .utf8)
-            result(html) // Return HTML text
-            return
-        } else if let rtfData = board.data(forPasteboardType: utTypeTextRtf) {
-            do {
-                let rtfAttrString = try NSAttributedString(data: rtfData, documentAttributes: nil)
-                let htmlData = try rtfAttrString.data(from: NSRange(location: 0, length: rtfAttrString.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.html])
-                result(String(data: htmlData, encoding: .utf8)) // Convert RTF to HTML and return
-                return
-            } catch {
-                result(nil) // Error occurred while converting RTF to HTML
-                return
-            }
-        } else if let plainData = board.string {
-            result(plainData) // Return plain text
-            return
-        }
-
-        result(nil) // No clipboard content found
-    }
-    
-    // Set text in the clipboard
-    private func setClipboardText(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let board = UIPasteboard.general
-        board.items = [[:]] // Clear clipboard items
-        
-        if let html = call.arguments as? String {
-            board.items[0][utTypeTextHtml] = html.data(using: .utf8) // Set clipboard content as HTML
-            result(true) // Completion
-            return
-        }
-        result(false) // No clipboard content found
     }
 }

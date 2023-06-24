@@ -1,10 +1,29 @@
+// MIT License
+//
+// Copyright (c) 2023 Code Vedas
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 package com.codevedas.vk_native_client
 
-import android.content.ClipData
+
 import android.content.Context
-import android.os.Build
-import android.text.Html
-import android.content.ClipboardManager
+
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
@@ -13,16 +32,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-/** Extension */
-fun ClipData.Item.coerceToHtmlText(context: Context): String {
-  val text = coerceToText(context).toString()
-  return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY).toString()
-  } else {
-      @Suppress("DEPRECATION")
-      Html.fromHtml(text).toString()
-  }
-}
 
 /** VkNativeClientPlugin */
 class VkNativeClientPlugin : FlutterPlugin, MethodCallHandler {
@@ -41,47 +50,13 @@ class VkNativeClientPlugin : FlutterPlugin, MethodCallHandler {
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         // Handle method calls from Flutter
         when (call.method) {
-            "getPlatformVersion" -> platformVersion(result)
-            "getClipboardText" -> getClipboardText(result)
-            "setClipboardText" -> setClipboardText(call, result)
-            "canCopyFromClipboard" -> canCopyFromClipboard(result)
+            /// getClipboardData returns Map<String, String>
+            "getClipboardData" -> result.success(ClipboardAndroid.getClipboardData(context))
+            /// setClipboardData returns bool
+            "setClipboardData" -> result.success(ClipboardAndroid.setClipboardData(call, context))
+            /// getClipboardDataMimeTypes returns List<String>
+            "getClipboardDataMimeTypes" -> result.success(ClipboardAndroid.getClipboardDataMimeTypes(context))
             else -> result.notImplemented() // Method not implemented
-        }
-    }
-    
-    private fun canCopyFromClipboard(result: Result) {
-        val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-        val clipData = clipboardManager?.primaryClip
-        result.success(clipData != null && clipData.itemCount > 0)
-    }
-
-    // Retrieve the Android version and send it back to Flutter
-    private fun platformVersion(result: Result) {
-        result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    }
-
-    // Get the text content from the clipboard and send it back to Flutter
-    private fun getClipboardText(result: Result) {
-        val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-        val clipData = clipboardManager?.primaryClip
-        if (clipData != null && clipData.itemCount > 0) {
-            val richText = clipData.getItemAt(0).coerceToHtmlText(context)
-            result.success(richText)
-        } else {
-            result.success(null)
-        }
-    }
-
-    // Set the text content of the clipboard with the provided HTML and notify Flutter
-    private fun setClipboardText(call: MethodCall, result: Result) {
-        val html = call.argument<String>("html")
-        val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-        val clipData = ClipData.newPlainText(null, html)
-        if (clipboardManager != null) {
-            clipboardManager.setPrimaryClip(clipData)
-            result.success(true)
-        } else {
-            result.success(false)
         }
     }
 
