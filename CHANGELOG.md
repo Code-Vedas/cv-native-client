@@ -1,5 +1,10 @@
 ## Change Log
 
+## 0.0.7
+
+- removed warning from README.md
+- no code changes
+
 ## 0.0.6
 
 - improved native implementation for Web, Android, iOS, macOS, Windows and Linux
