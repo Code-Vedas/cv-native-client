@@ -3,7 +3,6 @@
 #include <flutter_linux/flutter_linux.h>
 #include <gtk/gtk.h>
 #include "src/clipboard_linux.h"
-#include "src/platform_linux.h"
 
 #include "vk_native_client_plugin_private.h"
 
@@ -29,20 +28,19 @@ static void vk_native_client_plugin_handle_method_call(
 
   const gchar *method = fl_method_call_get_name(method_call);
 
-  if (strcmp(method, "getPlatformVersion") == 0)
+  if (strcmp(method, "getClipboardData") == 0)
   {
-    response = get_platform_version();
-  }
-  else if (strcmp(method, "getClipboardData") == 0)
-  {
+    /// get clipboard data from gtk clipboard
     response = get_clipboard_data();
   }
-  else if (strcmp(method, "canCopyFromClipboard") == 0)
+  else if (strcmp(method, "getClipboardDataMimeTypes") == 0)
   {
-    response = can_copy_from_clipboard();
+    /// get clipboard data mime types from gtk clipboard
+    response = get_clipboard_data_mime_types();
   }
   else if (strcmp(method, "setClipboardData") == 0)
   {
+    /// set clipboard data to gtk clipboard
     response = set_clipboard_data(method_call);
   }
   else
@@ -53,17 +51,10 @@ static void vk_native_client_plugin_handle_method_call(
   fl_method_call_respond(method_call, response, nullptr);
 }
 
-FlMethodResponse *get_platform_version()
+FlMethodResponse *get_clipboard_data_mime_types()
 {
-  gchar* version = PlatformLinux::getPlatformVersion();
-  g_autoptr(FlValue) result = fl_value_new_string(version);
-  return FL_METHOD_RESPONSE(fl_method_success_response_new(result));
-}
-
-FlMethodResponse *can_copy_from_clipboard()
-{
-  bool canCopy = ClipboardLinux::canCopyFromClipboard();
-  return FL_METHOD_RESPONSE(fl_method_success_response_new(fl_value_new_bool(canCopy)));
+  g_autoptr(FlValue) mimeArray = ClipboardLinux::getClipboardDataMimeTypes();
+  return FL_METHOD_RESPONSE(fl_method_success_response_new(mimeArray));
 }
 
 FlMethodResponse *set_clipboard_data(FlMethodCall *method_call)

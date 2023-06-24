@@ -6,14 +6,11 @@
 // https://github.com/flutter/flutter/issues/88724 for current limitations
 // in the unit-testable API.
 
-// Handles the getPlatformVersion method call.
-FlMethodResponse *get_platform_version();
-
 // Handles the getClipboardData method call.
 FlMethodResponse *get_clipboard_data();
 
 // Handles the setClipboardData method call.
 FlMethodResponse *set_clipboard_data(FlMethodCall *method_call);
 
-// Handles the canCopyFromClipboard method call.
-FlMethodResponse *can_copy_from_clipboard();
+// Handles the getClipboardDataMimeTypes method call.
+FlMethodResponse *get_clipboard_data_mime_types();

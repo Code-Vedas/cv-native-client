@@ -11,6 +11,8 @@ GdkAtom ClipboardLinux::kGdkAtomTextHtml = gdk_atom_intern_static_string(kMimeTe
 guint ClipboardLinux::kUserInfoTextPlain = 1;
 guint ClipboardLinux::kUserInfoTextHtml = 2;
 
+/// @brief Get clipboard data
+/// @return FlValue* - map with keys "plainText" and "htmlText"
 FlValue *ClipboardLinux::getClipboardData()
 {
     auto *clipboard = gtk_clipboard_get_default(gdk_display_get_default());
@@ -43,18 +45,19 @@ FlValue *ClipboardLinux::getClipboardData()
     return map;
 }
 
-bool ClipboardLinux::canCopyFromClipboard()
+/// @brief Get clipboard data mime types
+/// @return FlValue* - list with mime types "plainText" and "htmlText"
+/// - "plainText" - text/plain mime type (If clipboard contains plain text)
+/// - "htmlText" - text/html mime type (If clipboard contains html text)
+FlValue *ClipboardLinux::getClipboardDataMimeTypes()
 {
     auto *clipboard = gtk_clipboard_get_default(gdk_display_get_default());
     auto *text = gtk_clipboard_wait_for_text(clipboard);
-    bool canCopy = false;
+    FlValue *mimeArray = fl_value_new_list();
     if (text != nullptr)
     {
+        fl_value_append_take(mimeArray, fl_value_new_string(kPlainText));
         g_free(text);
-    }
-    else
-    {
-        canCopy = canCopy || false;
     }
     auto *html = gtk_clipboard_wait_for_contents(clipboard, gdk_atom_intern("text/html", FALSE));
     if (html != nullptr)
@@ -63,20 +66,15 @@ bool ClipboardLinux::canCopyFromClipboard()
         auto *htmlTypeName = gdk_atom_name(htmlType);
         if (strcmp(htmlTypeName, "text/html") == 0)
         {
-            canCopy = canCopy || true;
-        }
-        else
-        {
-            canCopy = canCopy || false;
+            fl_value_append_take(mimeArray, fl_value_new_string(kHtmlText));
         }
     }
-    else
-    {
-        canCopy = canCopy || false;
-    }
-    return canCopy;
+    return mimeArray;
 }
 
+/// @brief Set clipboard data
+/// @param method_call - method call
+/// @return bool - true if success
 bool ClipboardLinux::setClipboardData(FlMethodCall *method_call)
 {
     auto *clipboard = gtk_clipboard_get_default(gdk_display_get_default());
