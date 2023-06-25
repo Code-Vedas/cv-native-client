@@ -137,9 +137,6 @@ final class ClipboardWeb {
   /// - `false` if the clipboard API is not available in the current browser.
   static bool detectClipboardApi() {
     final Clipboard clipboard = getClipboard();
-    if (clipboard == null) {
-      return false;
-    }
     for (final String methodName in <String>['read', 'write']) {
       final dynamic method = js_util.getProperty(clipboard, methodName);
       if (method == null) {
