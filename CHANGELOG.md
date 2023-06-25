@@ -1,5 +1,10 @@
 ## Change Log
 
+## 0.0.9
+
+- Fixed linting issues
+- no real code changes
+
 ## 0.0.8
 
 - Fixed linting issues
