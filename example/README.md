@@ -1,16 +1,37 @@
 # cv_native_client_example
 
-Demonstrates how to use the cv_native_client plugin.
+Demo app for `cv_native_client` plugin.
 
-## Getting Started
+## Usage
 
-This project is a starting point for a Flutter application.
+To use this plugin, add `cv_native_client` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
-A few resources to get you started if this is your first Flutter project:
+### Installation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Add this to your package's pubspec.yaml file:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```yaml
+dependencies:
+  cv_native_client: ^1.0.1
+```
+
+### Example
+
+```dart
+import 'package:cv_native_client/cv_native_client.dart';
+
+// Get platform version
+String platformVersion = await CvNativeClient.getPlatformVersion();
+
+// Get clipboard data mime types
+final List<CvClipboardMimeType> mimeTypes = await CvNativeClient.getClipboardDataMimeTypes();
+log('Clipboard mime types: $mimeTypes');
+
+// Get clipboard Data
+final CvClipboardData? clipboardData = await CvNativeClient.getClipboardData();
+log('Clipboard text: ${clipboardData?.plainText}');
+log('Clipboard html: ${clipboardData?.htmlText}');
+
+// Set clipboard Data
+await CvNativeClient.setClipboardData(CvClipboardData(plainText: 'Hello World!', htmlText: '<b>Hello World!</b>'));
+```

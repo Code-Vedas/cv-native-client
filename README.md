@@ -13,7 +13,7 @@ Add this to your package's pubspec.yaml file:
 
 ```yaml
 dependencies:
-  cv_native_client: ^1.0.0
+  cv_native_client: ^1.0.1
 ```
 
 ### Example
