@@ -43,7 +43,8 @@ class DefaultClipboardWeb extends CvNativeClientPlatform {
   @override
   Future<Map<String, String>?> getClipboardData() async {
     /// Read raw clipboard text from the DOM.
-    final ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+    final ClipboardData? clipboardData =
+        await Clipboard.getData(Clipboard.kTextPlain);
     if (clipboardData == null) {
       /// Return null if clipboard is empty or unsupported.
       return null;
@@ -82,7 +83,8 @@ class DefaultClipboardWeb extends CvNativeClientPlatform {
   @override
   Future<List<String>> getClipboardDataMimeTypes() async {
     /// Read raw clipboard text mime types from the DOM.
-    final ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+    final ClipboardData? clipboardData =
+        await Clipboard.getData(Clipboard.kTextPlain);
     if (clipboardData == null) {
       /// Return empty list if clipboard is empty or unsupported.
       return <String>[];

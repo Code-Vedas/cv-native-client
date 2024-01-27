@@ -69,7 +69,8 @@ class _MyAppState extends State<MyApp> {
     return <Widget>[
       ElevatedButton(
         onPressed: () async {
-          final List<CvClipboardMimeType> mimeTypes = await CvNativeClient.getClipboardDataMimeTypes();
+          final List<CvClipboardMimeType> mimeTypes =
+              await CvNativeClient.getClipboardDataMimeTypes();
           logs.add('');
           logs.add('${DateTime.now()}: Clipboard mime types: $mimeTypes');
           setState(() {});
@@ -80,7 +81,8 @@ class _MyAppState extends State<MyApp> {
       const SizedBox(width: 16),
       ElevatedButton(
         onPressed: () async {
-          final CvClipboardData? clipboardData = await CvNativeClient.getClipboardData();
+          final CvClipboardData? clipboardData =
+              await CvNativeClient.getClipboardData();
           logs.add('');
           logs.add('plainText: ${clipboardData?.plainText}');
           logs.add('htmlText: ${clipboardData?.htmlText}');

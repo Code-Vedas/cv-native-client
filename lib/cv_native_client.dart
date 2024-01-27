@@ -38,7 +38,8 @@ abstract final class CvNativeClient {
   /// - Future<CvClipboardData?>: a [CvClipboardData] containing the clipboard data.
   static Future<CvClipboardData?> getClipboardData() async {
     /// Read raw clipboard data from the platform.
-    final Map<String, String>? data = await CvNativeClientPlatform.instance.getClipboardData();
+    final Map<String, String>? data =
+        await CvNativeClientPlatform.instance.getClipboardData();
     if (data == null) {
       /// Return null if clipboard is empty or unsupported.
       return null;
@@ -75,7 +76,8 @@ abstract final class CvNativeClient {
   /// types of the content currently available in the clipboard.
   static Future<List<CvClipboardMimeType>> getClipboardDataMimeTypes() async {
     /// Read raw clipboard mime types from the platform.
-    final List<String> mimeTypes = await CvNativeClientPlatform.instance.getClipboardDataMimeTypes();
+    final List<String> mimeTypes =
+        await CvNativeClientPlatform.instance.getClipboardDataMimeTypes();
 
     /// Convert the raw mime types to CvClipboardMimeType, and return it.
     return mimeTypes

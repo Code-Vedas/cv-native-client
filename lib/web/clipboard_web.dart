@@ -30,7 +30,8 @@ import 'dart:html' as html show window, Blob;
 import 'dart:typed_data' as typed_data show ByteBuffer;
 
 import 'package:js/js.dart' as js show JS, staticInterop;
-import 'package:js/js_util.dart' as js_util show jsify, callMethod, getProperty, promiseToFuture;
+import 'package:js/js_util.dart' as js_util
+    show jsify, callMethod, getProperty, promiseToFuture;
 
 /// Represents an event target.
 @js.JS()
@@ -55,7 +56,8 @@ extension ClipboardExtension on Clipboard {
   /// - a [Future] that completes with an empty [Iterable] if the clipboard is empty,
   /// - a [Future] that completes with `null` if the read operation failed or the clipboard is unsupported.
   Future<Iterable<ClipboardItem>> read() async {
-    final Future<Iterable<dynamic>> items = js_util.promiseToFuture(js_util.callMethod(this, 'read', <Object?>[]));
+    final Future<Iterable<dynamic>> items =
+        js_util.promiseToFuture(js_util.callMethod(this, 'read', <Object?>[]));
     return (await items).cast<ClipboardItem>();
   }
 
@@ -65,7 +67,9 @@ extension ClipboardExtension on Clipboard {
   /// - a [Future] that completes with `null` if the write operation was successful,
   /// - a [Future] that completes with an error if the write operation failed or the clipboard is unsupported.
   /// - a [Future] that completes with an error if the write operation failed or the clipboard is unsupported.
-  Future<void> write(Iterable<ClipboardItem> data) => js_util.promiseToFuture(js_util.callMethod(this, 'write', <Object?>[data.toList(growable: false)]));
+  Future<void> write(Iterable<ClipboardItem> data) =>
+      js_util.promiseToFuture(js_util
+          .callMethod(this, 'write', <Object?>[data.toList(growable: false)]));
 }
 
 /// Returns the clipboard instance.
@@ -92,14 +96,16 @@ extension BlobExt on html.Blob {
   /// Returns:
   /// - a [Future] that completes with the text of the blob if the read operation was successful,
   /// - a [Future] that completes with `null` if the read operation failed.
-  Future<String?> text() => js_util.promiseToFuture(js_util.callMethod(this, 'text', <Object?>[]));
+  Future<String?> text() =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'text', <Object?>[]));
 
   /// Reads the content of the blob as an array buffer asynchronously.
   ///
   /// Returns:
   /// - a [Future] that completes with the array buffer of the blob if the read operation was successful,
   /// - a [Future] that completes with `null` if the read operation failed.
-  Future<typed_data.ByteBuffer?> arrayBuffer() => js_util.promiseToFuture(js_util.callMethod(this, 'arrayBuffer', <Object?>[]));
+  Future<typed_data.ByteBuffer?> arrayBuffer() => js_util
+      .promiseToFuture(js_util.callMethod(this, 'arrayBuffer', <Object?>[]));
 }
 
 /// Extension methods for the [ClipboardItem] class.
@@ -108,14 +114,16 @@ extension ClipboardItemExtension on ClipboardItem {
   ///
   /// Returns:
   /// - an [Iterable] of [String]s containing the types of the clipboard item.
-  Iterable<String> get types => (js_util.getProperty(this, 'types') as Iterable<dynamic>).cast<String>();
+  Iterable<String> get types =>
+      (js_util.getProperty(this, 'types') as Iterable<dynamic>).cast<String>();
 
   /// Gets the clipboard item of the specified [type].
   ///
   /// Returns:
   /// - a [Future] that completes with the clipboard item of the specified [type] if the read operation was successful,
   /// - a [Future] that completes with `null` if the read operation failed.
-  Future<html.Blob?> getType(String type) => js_util.promiseToFuture(js_util.callMethod(this, 'getType', <Object?>[type]));
+  Future<html.Blob?> getType(String type) => js_util
+      .promiseToFuture(js_util.callMethod(this, 'getType', <Object?>[type]));
 }
 
 // ignore: avoid_classes_with_only_static_members
@@ -226,15 +234,18 @@ final class ClipboardWeb {
     final Map<String, dynamic> representations = <String, html.Blob>{};
     if (params.containsKey('plainText')) {
       /// Write the plain text.
-      representations['text/plain'] = html.Blob(<dynamic>[params['plainText']], 'text/plain');
+      representations['text/plain'] =
+          html.Blob(<dynamic>[params['plainText']], 'text/plain');
     }
     if (params.containsKey('htmlText')) {
       /// Write the HTML text.
-      representations['text/html'] = html.Blob(<dynamic>[params['htmlText']], 'text/html');
+      representations['text/html'] =
+          html.Blob(<dynamic>[params['htmlText']], 'text/html');
     }
     if (representations.isNotEmpty) {
       /// Write the clipboard content.
-      await clipboard.write(<ClipboardItem>[ClipboardItem(js_util.jsify(representations))]);
+      await clipboard.write(
+          <ClipboardItem>[ClipboardItem(js_util.jsify(representations))]);
       return true;
     }
 

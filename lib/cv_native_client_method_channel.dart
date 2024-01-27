@@ -39,7 +39,8 @@ class MethodChannelCvNativeClient extends CvNativeClientPlatform {
   ///   - 'htmlText': [String] containing the html text from the clipboard.
   @override
   Future<Map<String, String>?> getClipboardData() async {
-    final Map<String, String>? text = await methodChannel.invokeMapMethod<String, String>('getClipboardData');
+    final Map<String, String>? text =
+        await methodChannel.invokeMapMethod<String, String>('getClipboardData');
     return text;
   }
 
@@ -54,7 +55,8 @@ class MethodChannelCvNativeClient extends CvNativeClientPlatform {
   /// - Future<bool>: [bool] indicating whether the clipboard write was successful.
   @override
   Future<bool> setClipboardData(Map<String, String> params) async {
-    final bool? result = await methodChannel.invokeMethod<bool>('setClipboardData', params);
+    final bool? result =
+        await methodChannel.invokeMethod<bool>('setClipboardData', params);
     return result ?? false;
   }
 
@@ -66,7 +68,8 @@ class MethodChannelCvNativeClient extends CvNativeClientPlatform {
   ///   - 'htmlText': [String] containing the html text from the clipboard.
   @override
   Future<List<String>> getClipboardDataMimeTypes() async {
-    final List<String>? mimeTypes = await methodChannel.invokeListMethod<String>('getClipboardDataMimeTypes');
+    final List<String>? mimeTypes = await methodChannel
+        .invokeListMethod<String>('getClipboardDataMimeTypes');
     return mimeTypes ?? <String>[];
   }
 }

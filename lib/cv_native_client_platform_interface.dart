@@ -75,6 +75,7 @@ abstract class CvNativeClientPlatform extends PlatformInterface {
   ///   - 'plainText': [String] containing the plain text from the clipboard.
   ///   - 'htmlText': [String] containing the html text from the clipboard.
   Future<List<String>> getClipboardDataMimeTypes() async {
-    throw UnimplementedError('getAvailableMimeTypes() has not been implemented.');
+    throw UnimplementedError(
+        'getAvailableMimeTypes() has not been implemented.');
   }
 }

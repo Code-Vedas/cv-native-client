@@ -25,26 +25,34 @@ import 'package:cv_native_client/cv_native_client_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockCvNativeClientPlatform with MockPlatformInterfaceMixin implements CvNativeClientPlatform {
+class MockCvNativeClientPlatform
+    with MockPlatformInterfaceMixin
+    implements CvNativeClientPlatform {
   @override
-  Future<Map<String, String>?> getClipboardData() => Future<Map<String, String>?>.value(<String, String>{'plainText': 'text', 'htmlText': '<p>text</p>'});
+  Future<Map<String, String>?> getClipboardData() =>
+      Future<Map<String, String>?>.value(
+          <String, String>{'plainText': 'text', 'htmlText': '<p>text</p>'});
 
   @override
-  Future<bool> setClipboardData(Map<String, String> params) => Future<bool>.value(true);
+  Future<bool> setClipboardData(Map<String, String> params) =>
+      Future<bool>.value(true);
 
   @override
-  Future<List<String>> getClipboardDataMimeTypes() => Future<List<String>>.value(<String>['plainText', 'htmlText']);
+  Future<List<String>> getClipboardDataMimeTypes() =>
+      Future<List<String>>.value(<String>['plainText', 'htmlText']);
 }
 
 void main() {
-  final CvNativeClientPlatform initialPlatform = CvNativeClientPlatform.instance;
+  final CvNativeClientPlatform initialPlatform =
+      CvNativeClientPlatform.instance;
 
   test('$MethodChannelCvNativeClient is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelCvNativeClient>());
   });
 
   test('getClipboardData', () async {
-    final MockCvNativeClientPlatform fakePlatform = MockCvNativeClientPlatform();
+    final MockCvNativeClientPlatform fakePlatform =
+        MockCvNativeClientPlatform();
     CvNativeClientPlatform.instance = fakePlatform;
 
     expect((await CvNativeClient.getClipboardData())!.plainText, 'text');
@@ -52,16 +60,25 @@ void main() {
   });
 
   test('setClipboardData', () async {
-    final MockCvNativeClientPlatform fakePlatform = MockCvNativeClientPlatform();
+    final MockCvNativeClientPlatform fakePlatform =
+        MockCvNativeClientPlatform();
     CvNativeClientPlatform.instance = fakePlatform;
 
-    expect(await CvNativeClient.setClipboardData(const CvClipboardData(plainText: 'text', htmlText: '<p>text</p>')), true);
+    expect(
+        await CvNativeClient.setClipboardData(
+            const CvClipboardData(plainText: 'text', htmlText: '<p>text</p>')),
+        true);
   });
 
   test('getClipboardDataMimeTypes', () async {
-    final MockCvNativeClientPlatform fakePlatform = MockCvNativeClientPlatform();
+    final MockCvNativeClientPlatform fakePlatform =
+        MockCvNativeClientPlatform();
     CvNativeClientPlatform.instance = fakePlatform;
 
-    expect(await CvNativeClient.getClipboardDataMimeTypes(), <CvClipboardMimeType>[CvClipboardMimeType.plainText, CvClipboardMimeType.htmlText]);
+    expect(
+        await CvNativeClient.getClipboardDataMimeTypes(), <CvClipboardMimeType>[
+      CvClipboardMimeType.plainText,
+      CvClipboardMimeType.htmlText
+    ]);
   });
 }
