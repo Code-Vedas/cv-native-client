@@ -20,10 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'cv_native_client_platform_interface.dart';
 // ignore_for_file: avoid_classes_with_only_static_members
 
 import 'data/data.dart';
-import 'cv_native_client_platform_interface.dart';
+
 export 'data/data.dart';
 
 /// API for interacting with the clipboard.

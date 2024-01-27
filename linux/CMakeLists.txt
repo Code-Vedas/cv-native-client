@@ -4,16 +4,16 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Project-level configuration.
-set(PROJECT_NAME "vk_native_client")
+set(PROJECT_NAME "cv_native_client")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 # This value is used when generating builds using this plugin, so it must
 # not be changed.
-set(PLUGIN_NAME "vk_native_client_plugin")
+set(PLUGIN_NAME "cv_native_client_plugin")
 
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
-  "vk_native_client_plugin.cc"
+  "cv_native_client_plugin.cc"
   "src/clipboard_linux.h"
   "src/clipboard_linux.cc"
 )
@@ -46,7 +46,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-set(vk_native_client_bundled_libraries
+set(cv_native_client_bundled_libraries
   ""
   PARENT_SCOPE
 )

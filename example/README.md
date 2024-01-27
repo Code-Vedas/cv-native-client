@@ -1,6 +1,6 @@
-# vk_native_client_example
+# cv_native_client_example
 
-Demonstrates how to use the vk_native_client plugin.
+Demonstrates how to use the cv_native_client plugin.
 
 ## Getting Started
 

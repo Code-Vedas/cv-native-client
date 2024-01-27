@@ -20,7 +20,7 @@
 - improved native implementation for Web, Android, iOS, macOS, Windows and Linux
 - removed `canCopyFromClipboard` method
 - added new method `getClipboardDataMimeTypes` to get mime types of clipboard content
-  - mime types are returned as a list of 'VKClipboardMimeType' enum values
+  - mime types are returned as a list of 'CvClipboardMimeType' enum values
   - supported on Android, iOS, macOS, Windows and Linux
 - removed `platformVersion` method
 
@@ -55,17 +55,17 @@
 ### API Release Notes
 
 ```dart
-class VkNativeClient {
+class CvNativeClient {
   Future<String?> getPlatformVersion() {
-    return VkNativeClientPlatform.instance.getPlatformVersion();
+    return CvNativeClientPlatform.instance.getPlatformVersion();
   }
 
   Future<String?> getClipboardData() {
-    return VkNativeClientPlatform.instance.getClipboardData();
+    return CvNativeClientPlatform.instance.getClipboardData();
   }
 
   Future<bool> setClipboardData(String text) {
-    return VkNativeClientPlatform.instance.setClipboardData(text);
+    return CvNativeClientPlatform.instance.setClipboardData(text);
   }
 }
 ```

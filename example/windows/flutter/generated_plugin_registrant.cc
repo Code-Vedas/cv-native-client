@@ -6,9 +6,9 @@
 
 #include "generated_plugin_registrant.h"
 
-#include <vk_native_client/vk_native_client_plugin_c_api.h>
+#include <cv_native_client/cv_native_client_plugin_c_api.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
-  VkNativeClientPluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("VkNativeClientPluginCApi"));
+  CvNativeClientPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("CvNativeClientPluginCApi"));
 }

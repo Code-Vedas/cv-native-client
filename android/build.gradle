@@ -1,4 +1,4 @@
-group 'com.codevedas.vk_native_client'
+group 'com.codevedas.cv_native_client'
 version '1.0-SNAPSHOT'
 
 buildscript {

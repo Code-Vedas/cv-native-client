@@ -23,15 +23,15 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-import '../vk_native_client_platform_interface.dart';
+import '../cv_native_client_platform_interface.dart';
 
-/// Represents the default web implementation of the [VkNativeClientPlatform].
+/// Represents the default web implementation of the [CvNativeClientPlatform].
 /// This class is instantiated when the web platform does not support the
 ///
 /// clipboard API used in [ClipboardWeb].
-class DefaultClipboardWeb extends VkNativeClientPlatform {
+class DefaultClipboardWeb extends CvNativeClientPlatform {
   static void registerWith(Registrar registrar) {
-    VkNativeClientPlatform.instance = DefaultClipboardWeb();
+    CvNativeClientPlatform.instance = DefaultClipboardWeb();
   }
 
   /// get clipboard data from the clipboard asynchronously.

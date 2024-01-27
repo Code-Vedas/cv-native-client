@@ -1,5 +1,5 @@
+import 'package:cv_native_client/cv_native_client.dart';
 import 'package:flutter/material.dart';
-import 'package:vk_native_client/vk_native_client.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('VK Native Client Example App'),
+          title: const Text('CV Native Client Example App'),
         ),
         body: Center(
           child: Column(
@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
     return <Widget>[
       ElevatedButton(
         onPressed: () async {
-          final List<VKClipboardMimeType> mimeTypes = await VkNativeClient.getClipboardDataMimeTypes();
+          final List<CvClipboardMimeType> mimeTypes = await CvNativeClient.getClipboardDataMimeTypes();
           logs.add('');
           logs.add('${DateTime.now()}: Clipboard mime types: $mimeTypes');
           setState(() {});
@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> {
       const SizedBox(width: 16),
       ElevatedButton(
         onPressed: () async {
-          final VkClipboardData? clipboardData = await VkNativeClient.getClipboardData();
+          final CvClipboardData? clipboardData = await CvNativeClient.getClipboardData();
           logs.add('');
           logs.add('plainText: ${clipboardData?.plainText}');
           logs.add('htmlText: ${clipboardData?.htmlText}');
@@ -93,11 +93,11 @@ class _MyAppState extends State<MyApp> {
       const SizedBox(width: 16),
       ElevatedButton(
         onPressed: () async {
-          const VkClipboardData data = VkClipboardData(
+          const CvClipboardData data = CvClipboardData(
             plainText: 'Hello, world!',
             htmlText: '<p>Hello, world!</p>',
           );
-          final bool result = await VkNativeClient.setClipboardData(data);
+          final bool result = await CvNativeClient.setClipboardData(data);
           logs.add('');
           logs.add('${DateTime.now()}: Clipboard set: $result');
           setState(() {});

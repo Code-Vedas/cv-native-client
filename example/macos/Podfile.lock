@@ -1,22 +1,22 @@
 PODS:
-  - FlutterMacOS (1.0.0)
-  - vk_native_client (0.0.1):
+  - cv_native_client (0.0.1):
     - FlutterMacOS
+  - FlutterMacOS (1.0.0)
 
 DEPENDENCIES:
+  - cv_native_client (from `Flutter/ephemeral/.symlinks/plugins/cv_native_client/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - vk_native_client (from `Flutter/ephemeral/.symlinks/plugins/vk_native_client/macos`)
 
 EXTERNAL SOURCES:
+  cv_native_client:
+    :path: Flutter/ephemeral/.symlinks/plugins/cv_native_client/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
-  vk_native_client:
-    :path: Flutter/ephemeral/.symlinks/plugins/vk_native_client/macos
 
 SPEC CHECKSUMS:
+  cv_native_client: a5fbc5c5576a700d87eba04622dd25b6bd7780b9
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  vk_native_client: 37ddc40602465225e8a86e01e6bcc955fd60a75c
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

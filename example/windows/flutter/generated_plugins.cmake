@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  vk_native_client
+  cv_native_client
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

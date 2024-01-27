@@ -19,11 +19,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-import 'package:flutter_test/flutter_test.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:cv_native_client/cv_native_client.dart';
 import 'package:cv_native_client/cv_native_client_method_channel.dart';
 import 'package:cv_native_client/cv_native_client_platform_interface.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockCvNativeClientPlatform with MockPlatformInterfaceMixin implements CvNativeClientPlatform {
   @override

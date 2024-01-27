@@ -23,13 +23,13 @@ import 'package:flutter/material.dart';
 
 /// A class that represents the data that can be copied to the clipboard.
 @immutable
-final class VkClipboardData {
-  /// Constructs a [VkClipboardData].
+final class CvClipboardData {
+  /// Constructs a [CvClipboardData].
   ///
   /// Parameters:
   /// - [plainText]: The plain text to copy to the clipboard.
   /// - [htmlText]: The HTML text to copy to the clipboard.
-  const VkClipboardData({
+  const CvClipboardData({
     required this.plainText,
     required this.htmlText,
   });
@@ -45,7 +45,7 @@ final class VkClipboardData {
 ///
 /// - [plainText]: [String] containing the plain text from the clipboard.
 /// - [htmlText]: [String] containing the html text from the clipboard.
-enum VKClipboardMimeType {
+enum CvClipboardMimeType {
   /// Plain text.
   plainText,
 
