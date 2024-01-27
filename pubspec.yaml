@@ -1,6 +1,6 @@
 name: cv_native_client
 description: Native client to access platform specific features like clipboard, platform version, etc.
-version: 0.0.9
+version: 1.0.0
 homepage: "https://github.com/Code-Vedas/cv-native-client"
 repository: "https://github.com/Code-Vedas/cv-native-client"
 documentation: "https://github.com/Code-Vedas/cv-native-client"

@@ -1,5 +1,9 @@
 ## Change Log
 
+## 1.0.0
+
+- Breaking change: namespace change from 'vk_cv_native_client' to 'cv_native_client'
+
 ## 0.0.9
 
 - Fixed linting issues
