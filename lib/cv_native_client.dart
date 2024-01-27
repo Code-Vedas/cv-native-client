@@ -20,31 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'cv_native_client_platform_interface.dart';
 // ignore_for_file: avoid_classes_with_only_static_members
 
 import 'data/data.dart';
-import 'vk_native_client_platform_interface.dart';
+
 export 'data/data.dart';
 
 /// API for interacting with the clipboard.
 ///
 /// This class implements the similar API as the [Clipboard] class in `package:flutter/services.dart`.
 /// The difference is that this class supports both plain text and html text.
-abstract final class VkNativeClient {
+abstract final class CvNativeClient {
   /// Retrieves the clipboard data asynchronously.
   ///
   /// Returns:
-  /// - Future<VkClipboardData?>: a [VkClipboardData] containing the clipboard data.
-  static Future<VkClipboardData?> getClipboardData() async {
+  /// - Future<CvClipboardData?>: a [CvClipboardData] containing the clipboard data.
+  static Future<CvClipboardData?> getClipboardData() async {
     /// Read raw clipboard data from the platform.
-    final Map<String, String>? data = await VkNativeClientPlatform.instance.getClipboardData();
+    final Map<String, String>? data = await CvNativeClientPlatform.instance.getClipboardData();
     if (data == null) {
       /// Return null if clipboard is empty or unsupported.
       return null;
     }
 
-    /// Construct VkClipboardData from the raw clipboard data, and return it.
-    return VkClipboardData(
+    /// Construct CvClipboardData from the raw clipboard data, and return it.
+    return CvClipboardData(
       plainText: data['plainText'] ?? '',
       htmlText: data['htmlText'] ?? '',
     );
@@ -53,13 +54,13 @@ abstract final class VkNativeClient {
   /// Writes the provided [data] to the clipboard asynchronously.
   ///
   /// Parameters:
-  /// - data: [VkClipboardData] containing the clipboard data.
+  /// - data: [CvClipboardData] containing the clipboard data.
   ///
   /// Returns:
   /// - Future<bool>: [bool] indicating whether the clipboard write was successful.
-  static Future<bool> setClipboardData(VkClipboardData data) async {
+  static Future<bool> setClipboardData(CvClipboardData data) async {
     /// Write raw clipboard data to the platform, and return the result.
-    return VkNativeClientPlatform.instance.setClipboardData(
+    return CvNativeClientPlatform.instance.setClipboardData(
       <String, String>{
         'plainText': data.plainText,
         'htmlText': data.htmlText,
@@ -70,25 +71,25 @@ abstract final class VkNativeClient {
   /// Retrieves the mime types of the content currently available in the clipboard asynchronously.
   ///
   /// Returns:
-  /// - Future<List<VKClipboardMimeType>>: [List] of [VKClipboardMimeType]s containing the mime
+  /// - Future<List<CvClipboardMimeType>>: [List] of [CvClipboardMimeType]s containing the mime
   /// types of the content currently available in the clipboard.
-  static Future<List<VKClipboardMimeType>> getClipboardDataMimeTypes() async {
+  static Future<List<CvClipboardMimeType>> getClipboardDataMimeTypes() async {
     /// Read raw clipboard mime types from the platform.
-    final List<String> mimeTypes = await VkNativeClientPlatform.instance.getClipboardDataMimeTypes();
+    final List<String> mimeTypes = await CvNativeClientPlatform.instance.getClipboardDataMimeTypes();
 
-    /// Convert the raw mime types to VKClipboardMimeType, and return it.
+    /// Convert the raw mime types to CvClipboardMimeType, and return it.
     return mimeTypes
         .map((String mimeType) {
           switch (mimeType) {
             case 'plainText':
-              return VKClipboardMimeType.plainText;
+              return CvClipboardMimeType.plainText;
             case 'htmlText':
-              return VKClipboardMimeType.htmlText;
+              return CvClipboardMimeType.htmlText;
             default:
               return null;
           }
         })
-        .whereType<VKClipboardMimeType>() // remove nulls
+        .whereType<CvClipboardMimeType>() // remove nulls
         .toList();
   }
 }

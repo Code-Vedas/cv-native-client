@@ -19,7 +19,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#include "vk_native_client_plugin.h"
+#include "cv_native_client_plugin.h"
 // This must be included before many other Windows headers.
 #include <windows.h>
 #include <stdlib.h>
@@ -36,17 +36,17 @@
 
 #include "src/clipboard_windows.h"
 
-namespace vk_native_client
+namespace cv_native_client
 {
-  void VkNativeClientPlugin::RegisterWithRegistrar(
+  void CvNativeClientPlugin::RegisterWithRegistrar(
       flutter::PluginRegistrarWindows *registrar)
   {
     auto channel =
         std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-            registrar->messenger(), "vk_native_client",
+            registrar->messenger(), "cv_native_client",
             &flutter::StandardMethodCodec::GetInstance());
 
-    auto plugin = std::make_unique<VkNativeClientPlugin>();
+    auto plugin = std::make_unique<CvNativeClientPlugin>();
 
     channel->SetMethodCallHandler(
         [plugin_pointer = plugin.get()](const auto &call, auto result)
@@ -57,11 +57,11 @@ namespace vk_native_client
     registrar->AddPlugin(std::move(plugin));
   }
 
-  VkNativeClientPlugin::VkNativeClientPlugin() {}
+  CvNativeClientPlugin::CvNativeClientPlugin() {}
 
-  VkNativeClientPlugin::~VkNativeClientPlugin() {}
+  CvNativeClientPlugin::~CvNativeClientPlugin() {}
 
-  void VkNativeClientPlugin::HandleMethodCall(
+  void CvNativeClientPlugin::HandleMethodCall(
       const flutter::MethodCall<flutter::EncodableValue> &method_call,
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
   {

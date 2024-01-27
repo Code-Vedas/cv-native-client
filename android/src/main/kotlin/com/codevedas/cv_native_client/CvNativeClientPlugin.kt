@@ -19,11 +19,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-package com.codevedas.vk_native_client
-
+package com.codevedas.cv_native_client
 
 import android.content.Context
-
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
@@ -32,15 +30,14 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-
-/** VkNativeClientPlugin */
-class VkNativeClientPlugin : FlutterPlugin, MethodCallHandler {
+/** CvNativeClientPlugin */
+class CvNativeClientPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPluginBinding) {
         // Create a MethodChannel to communicate with Flutter
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "vk_native_client")
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "cv_native_client")
         channel.setMethodCallHandler(this)
 
         // Store the application context
@@ -55,7 +52,8 @@ class VkNativeClientPlugin : FlutterPlugin, MethodCallHandler {
             /// setClipboardData returns bool
             "setClipboardData" -> result.success(ClipboardAndroid.setClipboardData(call, context))
             /// getClipboardDataMimeTypes returns List<String>
-            "getClipboardDataMimeTypes" -> result.success(ClipboardAndroid.getClipboardDataMimeTypes(context))
+            "getClipboardDataMimeTypes" ->
+                    result.success(ClipboardAndroid.getClipboardDataMimeTypes(context))
             else -> result.notImplemented() // Method not implemented
         }
     }

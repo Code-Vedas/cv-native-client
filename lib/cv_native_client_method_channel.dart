@@ -20,22 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import '../vk_native_client_platform_interface.dart';
-import 'clipboard_web.dart';
-import 'default_clipboard_web.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
-/// A web implementation of the VkNativeClientPlatform of the VkNativeClient plugin.
-class VkNativeClientWeb extends VkNativeClientPlatform {
-  /// Constructs a VkNativeClientWeb
-  VkNativeClientWeb();
+import 'cv_native_client_platform_interface.dart';
 
-  static void registerWith(Registrar registrar) {
-    if (!ClipboardWeb.detectClipboardApi()) {
-      return DefaultClipboardWeb.registerWith(registrar);
-    }
-    VkNativeClientPlatform.instance = VkNativeClientWeb();
-  }
+/// An implementation of [CvNativeClientPlatform] that uses method channels.
+class MethodChannelCvNativeClient extends CvNativeClientPlatform {
+  /// The method channel used to interact with the native platform.
+  @visibleForTesting
+  final MethodChannel methodChannel = const MethodChannel('cv_native_client');
 
   /// get clipboard data from the clipboard asynchronously.
   ///
@@ -45,8 +39,8 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
   ///   - 'htmlText': [String] containing the html text from the clipboard.
   @override
   Future<Map<String, String>?> getClipboardData() async {
-    /// Read raw clipboard text from the DOM.
-    return ClipboardWeb.getClipboardData();
+    final Map<String, String>? text = await methodChannel.invokeMapMethod<String, String>('getClipboardData');
+    return text;
   }
 
   /// Writes the provided [text] to the clipboard asynchronously.
@@ -60,8 +54,8 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
   /// - Future<bool>: [bool] indicating whether the clipboard write was successful.
   @override
   Future<bool> setClipboardData(Map<String, String> params) async {
-    /// Write raw clipboard text to the DOM.
-    return ClipboardWeb.setClipboardData(params);
+    final bool? result = await methodChannel.invokeMethod<bool>('setClipboardData', params);
+    return result ?? false;
   }
 
   /// Retrieves the mime types of the content currently available in the clipboard asynchronously.
@@ -72,7 +66,7 @@ class VkNativeClientWeb extends VkNativeClientPlatform {
   ///   - 'htmlText': [String] containing the html text from the clipboard.
   @override
   Future<List<String>> getClipboardDataMimeTypes() async {
-    /// Read raw clipboard text mime types from the DOM.
-    return ClipboardWeb.getClipboardDataMimeTypes();
+    final List<String>? mimeTypes = await methodChannel.invokeListMethod<String>('getClipboardDataMimeTypes');
+    return mimeTypes ?? <String>[];
   }
 }

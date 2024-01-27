@@ -19,34 +19,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-import 'package:flutter/services.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:vk_native_client/vk_native_client_method_channel.dart';
+#ifndef FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_H_
+#define FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_H_
 
-void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+#include <flutter_linux/flutter_linux.h>
 
-  final MethodChannelVkNativeClient platform = MethodChannelVkNativeClient();
-  const MethodChannel channel = MethodChannel('vk_native_client');
+G_BEGIN_DECLS
 
-  setUp(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-      channel,
-      (MethodCall methodCall) async {
-        return <String, String>{
-          'plainText': '42',
-          'htmlText': '<p>42</p>',
-        };
-      },
-    );
-  });
+#ifdef FLUTTER_PLUGIN_IMPL
+#define FLUTTER_PLUGIN_EXPORT __attribute__((visibility("default")))
+#else
+#define FLUTTER_PLUGIN_EXPORT
+#endif
 
-  tearDown(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
-  });
+typedef struct _CvNativeClientPlugin CvNativeClientPlugin;
+typedef struct
+{
+  GObjectClass parent_class;
+} CvNativeClientPluginClass;
 
-  test('getClipboardData', () async {
-    expect((await platform.getClipboardData())!['plainText'], '42');
-    expect((await platform.getClipboardData())!['htmlText'], '<p>42</p>');
-  });
-}
+FLUTTER_PLUGIN_EXPORT GType cv_native_client_plugin_get_type();
+
+FLUTTER_PLUGIN_EXPORT void cv_native_client_plugin_register_with_registrar(
+    FlPluginRegistrar *registrar);
+
+G_END_DECLS
+
+#endif // FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_H_

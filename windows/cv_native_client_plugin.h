@@ -19,29 +19,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
-#define FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
+#ifndef FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_H_
+#define FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_H_
 
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar_windows.h>
 
 #include <memory>
 
-namespace vk_native_client
+namespace cv_native_client
 {
 
-    class VkNativeClientPlugin : public flutter::Plugin
+    class CvNativeClientPlugin : public flutter::Plugin
     {
     public:
         static void RegisterWithRegistrar(flutter::PluginRegistrarWindows *registrar);
 
-        VkNativeClientPlugin();
+        CvNativeClientPlugin();
 
-        virtual ~VkNativeClientPlugin();
+        virtual ~CvNativeClientPlugin();
 
         // Disallow copy and assign.
-        VkNativeClientPlugin(const VkNativeClientPlugin &) = delete;
-        VkNativeClientPlugin &operator=(const VkNativeClientPlugin &) = delete;
+        CvNativeClientPlugin(const CvNativeClientPlugin &) = delete;
+        CvNativeClientPlugin &operator=(const CvNativeClientPlugin &) = delete;
 
         // Called when a method is called on this plugin's channel from Dart.
         void HandleMethodCall(
@@ -49,6 +49,6 @@ namespace vk_native_client
             std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
     };
 
-} // namespace vk_native_client
+} // namespace cv_native_client
 
-#endif // FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_H_
+#endif // FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_H_

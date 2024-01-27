@@ -19,16 +19,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#include "include/vk_native_client/vk_native_client_plugin_c_api.h"
+#include "include/cv_native_client/cv_native_client_plugin_c_api.h"
 
 #include <flutter/plugin_registrar_windows.h>
 
-#include "vk_native_client_plugin.h"
+#include "cv_native_client_plugin.h"
 
-void VkNativeClientPluginCApiRegisterWithRegistrar(
+void CvNativeClientPluginCApiRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar)
 {
-    vk_native_client::VkNativeClientPlugin::RegisterWithRegistrar(
+    cv_native_client::CvNativeClientPlugin::RegisterWithRegistrar(
         flutter::PluginRegistrarManager::GetInstance()
             ->GetRegistrar<flutter::PluginRegistrarWindows>(registrar));
 }

@@ -19,27 +19,27 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-import Flutter
+#ifndef FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_C_API_H_
+#define FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_C_API_H_
 
-public class VkNativeClientPlugin: NSObject, FlutterPlugin {
-    // Register the plugin with the Flutter engine
-    public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "vk_native_client", binaryMessenger: registrar.messenger())
-        let instance = VkNativeClientPlugin()
-        registrar.addMethodCallDelegate(instance, channel: channel)
-    }
-    
-    // Handle method calls from Flutter
-    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        switch call.method {
-        case "getClipboardData":
-            result(ClipboardIOS.getClipboardData()) // Get clipboard data
-        case "setClipboardData":
-            result(ClipboardIOS.setClipboardData(call: call)) // Set clipboard data
-        case "getClipboardDataMimeTypes":
-            result(ClipboardIOS.getClipboardDataMimeTypes()) // Get clipboard data MIME types
-        default:
-            result(FlutterMethodNotImplemented) // Method not implemented
-        }
-    }
-}
+#include <flutter_plugin_registrar.h>
+
+#ifdef FLUTTER_PLUGIN_IMPL
+#define FLUTTER_PLUGIN_EXPORT __declspec(dllexport)
+#else
+#define FLUTTER_PLUGIN_EXPORT __declspec(dllimport)
+#endif
+
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
+
+    FLUTTER_PLUGIN_EXPORT void CvNativeClientPluginCApiRegisterWithRegistrar(
+        FlutterDesktopPluginRegistrarRef registrar);
+
+#if defined(__cplusplus)
+} // extern "C"
+#endif
+
+#endif // FLUTTER_PLUGIN_Cv_NATIVE_CLIENT_PLUGIN_C_API_H_

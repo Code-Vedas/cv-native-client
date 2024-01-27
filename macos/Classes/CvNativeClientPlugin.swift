@@ -26,11 +26,11 @@ import FlutterMacOS
 let mimeTextPlain = "text/plain"
 let mimeTextHtml = "text/html"
 
-public class VkNativeClientPlugin: NSObject, FlutterPlugin {
+public class CvNativeClientPlugin: NSObject, FlutterPlugin {
     // Register the plugin with the Flutter engine
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "vk_native_client", binaryMessenger: registrar.messenger)
-        let instance = VkNativeClientPlugin()
+        let channel = FlutterMethodChannel(name: "cv_native_client", binaryMessenger: registrar.messenger)
+        let instance = CvNativeClientPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     

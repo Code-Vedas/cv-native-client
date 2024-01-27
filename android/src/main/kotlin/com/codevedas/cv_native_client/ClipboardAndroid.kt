@@ -19,11 +19,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-package com.codevedas.vk_native_client
+package com.codevedas.cv_native_client
 
 import android.content.ClipData
-import android.content.Context
 import android.content.ClipboardManager
+import android.content.Context
 import android.os.Build
 import io.flutter.plugin.common.MethodCall
 
@@ -37,12 +37,13 @@ class ClipboardAndroid {
         /// - context - The application context.
         ///
         /// Returns:
-        /// - Map<String, String> - A map of strings containing the plain text and HTML text from the clipboard.
+        /// - Map<String, String> - A map of strings containing the plain text and HTML text from
+        // the clipboard.
         ///   - "plainText" - The plain text from the clipboard.
         ///   - "htmlText" - The HTML text from the clipboard.
         fun getClipboardData(context: Context): Map<String, String> {
             val clipboardManager =
-                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
             val clipData = clipboardManager?.primaryClip
             val map: MutableMap<String, String> = HashMap()
 
@@ -57,7 +58,7 @@ class ClipboardAndroid {
                     map["htmlText"] = item.htmlText.toString()
                 }
             }
-            /// Return the map    
+            /// Return the map
             return map
         }
 
@@ -75,14 +76,14 @@ class ClipboardAndroid {
             val htmlText = call.argument<String>("htmlText")
 
             val clipboardManager =
-                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
 
             if (plainText != null && htmlText != null && clipboardManager != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     /// Clear the clipboard, if supported
                     clipboardManager.clearPrimaryClip()
                 }
-                /// Set the clipboard data    
+                /// Set the clipboard data
                 val clipData = ClipData.newHtmlText("text/plain", plainText, htmlText)
                 clipboardManager.setPrimaryClip(clipData)
                 return true
@@ -90,17 +91,17 @@ class ClipboardAndroid {
             return false
         }
 
-
         /// Get the MIME types of the data on the clipboard.
         ///
         /// Parameters:
         /// - context - The application context.
         ///
         /// Returns:
-        /// - List<String> - A list of strings containing the MIME types of the data on the clipboard.
+        /// - List<String> - A list of strings containing the MIME types of the data on the
+        // clipboard.
         fun getClipboardDataMimeTypes(context: Context): List<String> {
             val clipboardManager =
-                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
             val clipData = clipboardManager?.primaryClip
             val mimeTypes: MutableList<String> = ArrayList()
             if (clipData != null && clipData.itemCount > 0) {

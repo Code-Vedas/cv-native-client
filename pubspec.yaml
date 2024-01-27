@@ -1,10 +1,10 @@
-name: vk_native_client
+name: cv_native_client
 description: Native client to access platform specific features like clipboard, platform version, etc.
 version: 0.0.9
-homepage: "https://github.com/Code-Vedas/vk-native-client"
-repository: "https://github.com/Code-Vedas/vk-native-client"
-documentation: "https://github.com/Code-Vedas/vk-native-client"
-issue_tracker: "https://github.com/Code-Vedas/vk-native-client/issues"
+homepage: "https://github.com/Code-Vedas/cv-native-client"
+repository: "https://github.com/Code-Vedas/cv-native-client"
+documentation: "https://github.com/Code-Vedas/cv-native-client"
+issue_tracker: "https://github.com/Code-Vedas/cv-native-client/issues"
 topics:
   - clipboard
 
@@ -29,16 +29,16 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.codevedas.vk_native_client
-        pluginClass: VkNativeClientPlugin
+        package: com.codevedas.cv_native_client
+        pluginClass: CvNativeClientPlugin
       ios:
-        pluginClass: VkNativeClientPlugin
+        pluginClass: CvNativeClientPlugin
       linux:
-        pluginClass: VkNativeClientPlugin
+        pluginClass: CvNativeClientPlugin
       macos:
-        pluginClass: VkNativeClientPlugin
+        pluginClass: CvNativeClientPlugin
       windows:
-        pluginClass: VkNativeClientPluginCApi
+        pluginClass: CvNativeClientPluginCApi
       web:
-        pluginClass: VkNativeClientWeb
-        fileName: web/vk_native_client_web.dart
+        pluginClass: CvNativeClientWeb
+        fileName: web/cv_native_client_web.dart

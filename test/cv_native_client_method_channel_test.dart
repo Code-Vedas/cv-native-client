@@ -19,27 +19,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_C_API_H_
-#define FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_C_API_H_
+import 'package:cv_native_client/cv_native_client_method_channel.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-#include <flutter_plugin_registrar.h>
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-#ifdef FLUTTER_PLUGIN_IMPL
-#define FLUTTER_PLUGIN_EXPORT __declspec(dllexport)
-#else
-#define FLUTTER_PLUGIN_EXPORT __declspec(dllimport)
-#endif
+  final MethodChannelCvNativeClient platform = MethodChannelCvNativeClient();
+  const MethodChannel channel = MethodChannel('cv_native_client');
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
+  setUp(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      channel,
+      (MethodCall methodCall) async {
+        return <String, String>{
+          'plainText': '42',
+          'htmlText': '<p>42</p>',
+        };
+      },
+    );
+  });
 
-    FLUTTER_PLUGIN_EXPORT void VkNativeClientPluginCApiRegisterWithRegistrar(
-        FlutterDesktopPluginRegistrarRef registrar);
+  tearDown(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
+  });
 
-#if defined(__cplusplus)
-} // extern "C"
-#endif
-
-#endif // FLUTTER_PLUGIN_VK_NATIVE_CLIENT_PLUGIN_C_API_H_
+  test('getClipboardData', () async {
+    expect((await platform.getClipboardData())!['plainText'], '42');
+    expect((await platform.getClipboardData())!['htmlText'], '<p>42</p>');
+  });
+}
